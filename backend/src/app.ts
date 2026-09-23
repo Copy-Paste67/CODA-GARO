@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
+import refugioRoutes from './routes/refugio.routes';
+import publicacionAdopcionRoutes from './routes/publicacionAdopcion.routes';
+import reporteMascotaRoutes from './routes/reporteMascota.routes';
 
 const app = express();
 
@@ -12,5 +15,8 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/refugios', refugioRoutes);
+app.use('/api/publicaciones', publicacionAdopcionRoutes);
+app.use('/api/reportes', reporteMascotaRoutes);
 
 export default app;
