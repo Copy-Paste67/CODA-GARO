@@ -1,0 +1,141 @@
+@baseUrl = http://localhost:3000
+
+### Health check
+GET {{baseUrl}}/health
+
+### ==================== AUTH ====================
+
+### Registro - adoptante
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre_completo": "Jose Test",
+  "email": "jose@test.com",
+  "password": "123456",
+  "rol": "ADOPTANTE"
+}
+
+### Registro - refugio
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre_completo": "Refugio Los Amigos",
+  "email": "refugio@test.com",
+  "password": "123456",
+  "rol": "REFUGIO"
+}
+
+### Login - adoptante
+# @name loginAdoptante
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jose@test.com",
+  "password": "123456"
+}
+
+### Login - refugio
+# @name loginRefugio
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "refugio@test.com",
+  "password": "123456"
+}
+
+### Perfil (ruta protegida) - usa el token que te devolvio el login de arriba
+@tokenAdoptante = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJyb2wiOiJBRE9QVEFOVEUiLCJpYXQiOjE3OTAxNDMxMjAsImV4cCI6MTc5MDE3MTkyMH0.Lxvw2SPw7V4RfisxDrk8F3XLkSMxrNXCtWFt7wDKJgc
+@tokenRefugio = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyLCJyb2wiOiJSRUZVR0lPIiwiaWF0IjoxNzkwMTQzMjI2LCJleHAiOjE3OTAxNzIwMjZ9.s7Fsg4PbYbK51Wn5QISdci14574efb47xbLolAvt2jg
+
+GET {{baseUrl}}/api/auth/perfil
+Authorization: Bearer {{tokenAdoptante}}
+
+### ==================== REFUGIOS ====================
+
+### Crear refugio (debe fallar 403 con token de adoptante)
+POST {{baseUrl}}/api/refugios
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "nombre_refugio": "Refugio Test",
+  "direccion": "Zona 1, Guatemala"
+}
+
+### Crear refugio (debe funcionar 201 con token de refugio)
+POST {{baseUrl}}/api/refugios
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "nombre_refugio": "Refugio Los Amigos",
+  "direccion": "Zona 1, Guatemala"
+}
+
+### Listar refugios (publico)
+GET {{baseUrl}}/api/refugios
+
+### Obtener refugio por id
+GET {{baseUrl}}/api/refugios/1
+
+### ==================== PUBLICACIONES DE ADOPCION ====================
+
+### Crear publicacion (solo REFUGIO)
+POST {{baseUrl}}/api/publicaciones
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "nombre_animal": "Firulais",
+  "especie": "PERRO",
+  "raza_aparente": "Mestizo",
+  "edad_aproximada": "2 años",
+  "tamanio": "MEDIANO",
+  "descripcion": "Perrito muy cariñoso, busca hogar"
+}
+
+### Listar publicaciones (publico)
+GET {{baseUrl}}/api/publicaciones
+
+### Listar con filtro por especie
+GET {{baseUrl}}/api/publicaciones?especie=PERRO
+
+### Obtener publicacion por id
+GET {{baseUrl}}/api/publicaciones/1
+
+### ==================== REPORTES DE MASCOTA ====================
+
+### Crear reporte (cualquier usuario logueado)
+POST {{baseUrl}}/api/reportes
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "tipo": "PERDIDO",
+  "especie": "GATO",
+  "descripcion_fisica": "Gato blanco con manchas negras, collar rojo",
+  "ubicacion_suceso": "Zona 1, Ciudad de Guatemala",
+  "fecha_suceso": "2026-09-20"
+}
+
+### Listar reportes (publico)
+GET {{baseUrl}}/api/reportes
+
+### Listar con filtro por tipo
+GET {{baseUrl}}/api/reportes?tipo=PERDIDO
+
+### Crear reporte sin token (debe fallar 401)
+POST {{baseUrl}}/api/reportes
+Content-Type: application/json
+
+{
+  "tipo": "ENCONTRADO",
+  "especie": "PERRO",
+  "descripcion_fisica": "Test",
+  "ubicacion_suceso": "Test",
+  "fecha_suceso": "2026-09-20"
+}
