@@ -1,1 +1,42 @@
-<p>refugio-form works!</p>
+<section class="form-page">
+  <h1>{{ esEdicion ? 'Editar refugio' : 'Registrar refugio' }}</h1>
+
+  <form [formGroup]="formRefugio" (ngSubmit)="guardar()">
+    <div class="form-group">
+      <label for="nombre_refugio">Nombre del refugio</label>
+      <input id="nombre_refugio" type="text" formControlName="nombre_refugio" />
+      <span class="form-error" *ngIf="formRefugio.get('nombre_refugio')?.invalid && formRefugio.get('nombre_refugio')?.touched">
+        El nombre del refugio es obligatorio.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="direccion">Dirección</label>
+      <input id="direccion" type="text" formControlName="direccion" />
+      <span class="form-error" *ngIf="formRefugio.get('direccion')?.invalid && formRefugio.get('direccion')?.touched">
+        La dirección es obligatoria.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" formControlName="descripcion" rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="logo_url">URL del logo</label>
+      <input id="logo_url" type="url" formControlName="logo_url" placeholder="https://..." />
+    </div>
+
+    <div class="form-page__error" *ngIf="errorFormulario">
+      {{ errorFormulario }}
+    </div>
+
+    <div class="form-page__acciones">
+      <button type="submit" class="btn btn--primary" [disabled]="formRefugio.invalid || guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <button type="button" class="btn btn--outline" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</section>

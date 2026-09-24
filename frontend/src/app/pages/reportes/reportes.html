@@ -1,1 +1,50 @@
-<p>reportes works!</p>
+<section class="listado-page">
+  <header class="listado-page__header">
+    <h1>Mascotas perdidas y encontradas</h1>
+    <a *ngIf="usuarioActual" routerLink="/reportes/nuevo" class="btn btn--primary">
+      Reportar mascota
+    </a>
+  </header>
+
+  <form class="filtros" [formGroup]="formFiltros" (ngSubmit)="aplicarFiltros()">
+    <select formControlName="tipo">
+      <option value="">Tipo (todos)</option>
+      <option value="PERDIDO">Perdido</option>
+      <option value="ENCONTRADO">Encontrado</option>
+    </select>
+
+    <select formControlName="especie">
+      <option value="">Especie (todas)</option>
+      <option value="PERRO">Perro</option>
+      <option value="GATO">Gato</option>
+      <option value="AVE">Ave</option>
+      <option value="OTRO">Otro</option>
+    </select>
+
+    <select formControlName="estado">
+      <option value="">Estado (todos)</option>
+      <option value="BUSCANDO">Buscando</option>
+      <option value="RESUELTO">Resuelto</option>
+    </select>
+
+    <button type="submit" class="btn btn--outline">Filtrar</button>
+  </form>
+
+  <div class="listado-grid">
+    <article class="reporte-card" *ngFor="let reporte of reportes">
+      <span class="badge" [class]="'badge--' + reporte.tipo.toLowerCase()">{{ reporte.tipo }}</span>
+      <span class="badge" [class]="'badge--' + reporte.estado.toLowerCase()">{{ reporte.estado }}</span>
+
+      <h2>{{ reporte.especie }}</h2>
+      <p class="reporte-card__ubicacion">{{ reporte.ubicacion_suceso }}</p>
+      <p class="reporte-card__fecha">{{ reporte.fecha_suceso | date: 'mediumDate' }}</p>
+      <p class="reporte-card__descripcion">{{ reporte.descripcion_fisica }}</p>
+
+      <a [routerLink]="['/reportes', reporte.id_reporte]" class="btn btn--outline">Ver más</a>
+    </article>
+
+    <p class="listado-page__vacio" *ngIf="reportes.length === 0">
+      No hay reportes que coincidan con tu búsqueda.
+    </p>
+  </div>
+</section>

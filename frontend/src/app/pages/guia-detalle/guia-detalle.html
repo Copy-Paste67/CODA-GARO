@@ -1,1 +1,24 @@
-<p>guia-detalle works!</p>
+<article class="detalle-page" *ngIf="guia">
+  <header class="detalle-page__header">
+    <div>
+      <h1>{{ guia.titulo }}</h1>
+      <p class="detalle-page__meta">
+        Especie objetivo: {{ guia.especie_objetivo }} · {{ guia.fecha_publicacion | date: 'mediumDate' }}
+      </p>
+    </div>
+
+    <div class="detalle-page__acciones" *ngIf="esAutor || esAdmin">
+      <a [routerLink]="['/guias', guia.id_guia, 'editar']" class="btn btn--outline">Editar</a>
+      <button type="button" class="btn btn--peligro" (click)="eliminarGuia()">Eliminar</button>
+    </div>
+  </header>
+
+  <img
+    class="detalle-page__portada"
+    *ngIf="guia.imagen_portada_url"
+    [src]="guia.imagen_portada_url"
+    [alt]="guia.titulo"
+  />
+
+  <div class="detalle-page__contenido" [innerHTML]="guia.contenido_html"></div>
+</article>

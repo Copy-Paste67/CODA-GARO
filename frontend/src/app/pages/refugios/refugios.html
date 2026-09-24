@@ -1,1 +1,37 @@
-<p>refugios works!</p>
+<section class="listado-page">
+  <header class="listado-page__header">
+    <h1>Refugios</h1>
+    
+      *ngIf="usuarioActual?.rol === 'REFUGIO'"
+      routerLink="/refugios/nuevo"
+      class="btn btn--primary"
+    >
+      Registrar mi refugio
+    </a>
+  </header>
+
+  <div class="listado-grid">
+    <article class="refugio-card" *ngFor="let refugio of refugios">
+      <img
+        class="refugio-card__logo"
+        [src]="refugio.logo_url || 'assets/img/refugio-default.png'"
+        [alt]="refugio.nombre_refugio"
+      />
+
+      <div class="refugio-card__body">
+        <h2 class="refugio-card__nombre">
+          {{ refugio.nombre_refugio }}
+          <span class="badge badge--verificado" *ngIf="refugio.verificado">Verificado</span>
+        </h2>
+        <p class="refugio-card__direccion">{{ refugio.direccion }}</p>
+        <p class="refugio-card__descripcion">{{ refugio.descripcion }}</p>
+
+        <a [routerLink]="['/refugios', refugio.id_refugio]" class="btn btn--outline">Ver más</a>
+      </div>
+    </article>
+
+    <p class="listado-page__vacio" *ngIf="refugios.length === 0">
+      No hay refugios registrados por el momento.
+    </p>
+  </div>
+</section>

@@ -1,1 +1,28 @@
-<p>reporte-detalle works!</p>
+<section class="detalle-page" *ngIf="reporte">
+  <header class="detalle-page__header">
+    <div>
+      <h1>{{ reporte.especie }} — {{ reporte.tipo }}</h1>
+      <p class="detalle-page__meta">{{ reporte.ubicacion_suceso }} · {{ reporte.fecha_suceso | date: 'mediumDate' }}</p>
+      <span class="badge" [class]="'badge--' + reporte.estado.toLowerCase()">{{ reporte.estado }}</span>
+    </div>
+
+    <div class="detalle-page__acciones" *ngIf="esDueno || esAdmin">
+      <a [routerLink]="['/reportes', reporte.id_reporte, 'editar']" class="btn btn--outline">Editar</a>
+      <button type="button" class="btn btn--peligro" (click)="eliminarReporte()">Eliminar</button>
+    </div>
+  </header>
+
+  <p class="detalle-page__descripcion">{{ reporte.descripcion_fisica }}</p>
+
+  <app-galeria-imagenes
+    [imagenes]="imagenes"
+    [puedeAgregar]="esDueno || esAdmin"
+    [puedeEliminar]="esDueno || esAdmin"
+    [idReporte]="reporte.id_reporte"
+  ></app-galeria-imagenes>
+
+  <app-comentarios
+    [comentarios]="comentarios"
+    [idReporte]="reporte.id_reporte"
+  ></app-comentarios>
+</section>

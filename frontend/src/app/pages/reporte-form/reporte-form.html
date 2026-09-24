@@ -1,1 +1,74 @@
-<p>reporte-form works!</p>
+<section class="form-page">
+  <h1>{{ esEdicion ? 'Editar reporte' : 'Reportar mascota' }}</h1>
+
+  <form [formGroup]="formReporte" (ngSubmit)="guardar()">
+    <div class="form-group">
+      <label for="tipo">Tipo de reporte</label>
+      <select id="tipo" formControlName="tipo">
+        <option value="">Selecciona una opción</option>
+        <option value="PERDIDO">Perdí a mi mascota</option>
+        <option value="ENCONTRADO">Encontré una mascota</option>
+      </select>
+      <span class="form-error" *ngIf="formReporte.get('tipo')?.invalid && formReporte.get('tipo')?.touched">
+        El tipo de reporte es obligatorio.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="especie">Especie</label>
+      <select id="especie" formControlName="especie">
+        <option value="">Selecciona una especie</option>
+        <option value="PERRO">Perro</option>
+        <option value="GATO">Gato</option>
+        <option value="AVE">Ave</option>
+        <option value="OTRO">Otro</option>
+      </select>
+      <span class="form-error" *ngIf="formReporte.get('especie')?.invalid && formReporte.get('especie')?.touched">
+        La especie es obligatoria.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion_fisica">Descripción física</label>
+      <textarea id="descripcion_fisica" formControlName="descripcion_fisica" rows="4"></textarea>
+      <span class="form-error" *ngIf="formReporte.get('descripcion_fisica')?.invalid && formReporte.get('descripcion_fisica')?.touched">
+        La descripción física es obligatoria.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="ubicacion_suceso">Ubicación del suceso</label>
+      <input id="ubicacion_suceso" type="text" formControlName="ubicacion_suceso" />
+      <span class="form-error" *ngIf="formReporte.get('ubicacion_suceso')?.invalid && formReporte.get('ubicacion_suceso')?.touched">
+        La ubicación es obligatoria.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="fecha_suceso">Fecha del suceso</label>
+      <input id="fecha_suceso" type="date" formControlName="fecha_suceso" />
+      <span class="form-error" *ngIf="formReporte.get('fecha_suceso')?.invalid && formReporte.get('fecha_suceso')?.touched">
+        La fecha es obligatoria.
+      </span>
+    </div>
+
+    <div class="form-group" *ngIf="esEdicion">
+      <label for="estado">Estado</label>
+      <select id="estado" formControlName="estado">
+        <option value="BUSCANDO">Buscando</option>
+        <option value="RESUELTO">Resuelto</option>
+      </select>
+    </div>
+
+    <div class="form-page__error" *ngIf="errorFormulario">
+      {{ errorFormulario }}
+    </div>
+
+    <div class="form-page__acciones">
+      <button type="submit" class="btn btn--primary" [disabled]="formReporte.invalid || guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <button type="button" class="btn btn--outline" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</section>

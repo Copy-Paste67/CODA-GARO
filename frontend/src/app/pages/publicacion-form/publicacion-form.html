@@ -1,1 +1,44 @@
-<p>publicacion-form works!</p>
+<section class="detalle-page" *ngIf="refugio">
+  <header class="detalle-page__header">
+    <img
+      class="detalle-page__logo"
+      [src]="refugio.logo_url || 'assets/img/refugio-default.png'"
+      [alt]="refugio.nombre_refugio"
+    />
+
+    <div>
+      <h1>
+        {{ refugio.nombre_refugio }}
+        <span class="badge badge--verificado" *ngIf="refugio.verificado">Verificado</span>
+      </h1>
+      <p class="detalle-page__direccion">{{ refugio.direccion }}</p>
+    </div>
+
+    <div class="detalle-page__acciones" *ngIf="esDueno || esAdmin">
+      <a [routerLink]="['/refugios', refugio.id_refugio, 'editar']" class="btn btn--outline">Editar</a>
+      <button
+        type="button"
+        class="btn btn--verificar"
+        *ngIf="esAdmin"
+        (click)="alternarVerificacion()"
+      >
+        {{ refugio.verificado ? 'Quitar verificación' : 'Verificar refugio' }}
+      </button>
+      <button type="button" class="btn btn--peligro" (click)="eliminarRefugio()">Eliminar</button>
+    </div>
+  </header>
+
+  <p class="detalle-page__descripcion">{{ refugio.descripcion }}</p>
+
+  <section class="detalle-page__publicaciones">
+    <h2>Animales en adopción de este refugio</h2>
+    <div class="listado-grid" *ngIf="publicaciones.length > 0">
+      <article class="mascota-card" *ngFor="let publicacion of publicaciones">
+        <h3>{{ publicacion.nombre_animal || publicacion.especie }}</h3>
+        <p>{{ publicacion.estado }}</p>
+        <a [routerLink]="['/publicaciones', publicacion.id_adopcion]">Ver detalle</a>
+      </article>
+    </div>
+    <p *ngIf="publicaciones.length === 0">Este refugio aún no tiene publicaciones.</p>
+  </section>
+</section>
