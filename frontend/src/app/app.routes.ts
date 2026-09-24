@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
-import { Login } from './pages/login/login';
-import { Publicaciones } from './pages/publicaciones/publicaciones';
+import { PublicacionesComponent } from './pages/publicaciones/publicaciones';
+import { LoginComponent } from './pages/login/login';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: Login },
-    { path: 'publicaciones', component: Publicaciones },
+  { path: '', redirectTo: 'publicaciones', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'publicaciones', component: PublicacionesComponent },
+  { path: '**', redirectTo: 'publicaciones' }
 ];

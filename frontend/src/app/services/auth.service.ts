@@ -1,43 +1,55 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-interface LoginResponse {
-    token: string;
-    usuario: {
-        id_usuario: number;
-        nombre_completo: string;
-        email: string;
-        rol: string;
-    };
+export interface UsuarioSesion {
+  id_usuario: number;
+  nombre: string;
+  email: string;
+  rol?: string;
 }
 
-@Injectable({ providedIn: 'root' })
+export interface AuthResponse {
+  token: string;
+  usuario: UsuarioSesion;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-    constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/auth`;
 
-    login(email: string, password: string): Observable<LoginResponse> {
-        return this.http
-            .post<LoginResponse>(`${environment.apiUrl}/auth/login`, { email, password })
-            .pipe(
-                tap((res) => {
-                    localStorage.setItem('token', res.token);
-                    localStorage.setItem('usuario', JSON.stringify(res.usuario));
-                }),
-            );
-    }
+  currentUser = signal<UsuarioSesion | null>(this.obtenerUsuarioAlmacenado());
 
-    logout(): void {
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-    }
+  login(credenciales: { email: string; password: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credenciales).pipe(
+      tap((res) => {
+        localStorage.setItem('coda_token', res.token);
+        localStorage.setItem('coda_user', JSON.stringify(res.usuario));
+        this.currentUser.set(res.usuario);
+      })
+    );
+  }
 
-    getToken(): string | null {
-        return localStorage.getItem('token');
-    }
+  logout(): void {
+    localStorage.removeItem('coda_token');
+    localStorage.removeItem('coda_user');
+    this.currentUser.set(null);
+  }
 
-    estaLogueado(): boolean {
-        return !!this.getToken();
-    }
+  getToken(): string | null {
+    return localStorage.getItem('coda_token');
+  }
+
+  isAutenticado(): boolean {
+    return !!this.getToken();
+  }
+
+  private obtenerUsuarioAlmacenado(): UsuarioSesion | null {
+    const raw = localStorage.getItem('coda_user');
+    return raw ? JSON.parse(raw) : null;
+  }
 }

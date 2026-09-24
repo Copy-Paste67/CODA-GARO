@@ -1,23 +1,65 @@
-<div style="max-width: 700px; margin: 40px auto;">
-    <h2>Mascotas en adopción</h2>
+<div class="contenedor-adopcion">
+  <aside class="panel-filtros">
+    <h3>Filtrar Búsqueda</h3>
+    
+    <div class="grupo-campo">
+      <label for="filtro-especie">Especie:</label>
+      <select id="filtro-especie" [(ngModel)]="filtroEspecie" (change)="aplicarFiltros()">
+        <option value="">Todas</option>
+        <option value="perro">Perros</option>
+        <option value="gato">Gatos</option>
+        <option value="otro">Otros</option>
+      </select>
+    </div>
 
-    @if (cargando) {
-        <p>Cargando...</p>
-    }
+    <div class="grupo-campo">
+      <label for="filtro-tamano">Tamaño:</label>
+      <select id="filtro-tamano" [(ngModel)]="filtroTamano" (change)="aplicarFiltros()">
+        <option value="">Cualquiera</option>
+        <option value="pequeño">Pequeño</option>
+        <option value="mediano">Mediano</option>
+        <option value="grande">Grande</option>
+      </select>
+    </div>
 
-    @if (error) {
-        <p style="color: red;">{{ error }}</p>
-    }
+    <div class="grupo-campo">
+      <label for="filtro-distancia">Radio de cercanía: {{ filtroDistancia }} km</label>
+      <input 
+        id="filtro-distancia"
+        type="range" 
+        min="5" 
+        max="100" 
+        step="5" 
+        [(ngModel)]="filtroDistancia" 
+        (change)="aplicarFiltros()" 
+      />
+    </div>
+  </aside>
 
-    @for (pub of publicaciones; track pub.id_adopcion) {
-        <div style="border: 1px solid #ccc; padding: 12px; margin-bottom: 8px;">
-            <strong>{{ pub.nombre_animal || 'Sin nombre' }}</strong> — {{ pub.especie }} ({{ pub.tamanio }})
-            <p>{{ pub.descripcion }}</p>
-            <em>Estado: {{ pub.estado }}</em>
+  <main class="catalogo">
+    <div *ngIf="cargando()" class="estado-mensaje">Cargando mascotas disponibles...</div>
+    <div *ngIf="error()" class="alerta-error">{{ error() }}</div>
+
+    <div *ngIf="!cargando() && publicaciones().length === 0" class="estado-mensaje">
+      No se encontraron mascotas disponibles con los filtros aplicados.
+    </div>
+
+    <div class="grid-mascotas" *ngIf="!cargando()">
+      <article *ngFor="let pet of publicaciones()" class="card-mascota">
+        <img 
+          [src]="pet.imagenes[0] || 'favicon.ico'" 
+          [alt]="pet.nombre_mascota"
+          class="foto-card"
+        />
+        <div class="info-card">
+          <h4>{{ pet.nombre_mascota }}</h4>
+          <p class="detalles">{{ pet.especie | titlecase }} • {{ pet.tamano }}</p>
+          <p class="distancia" *ngIf="pet.distancia_km">
+            📍 A {{ pet.distancia_km | number:'1.1-1' }} km de ti
+          </p>
+          <button type="button" class="btn-adopcion">Ver detalles</button>
         </div>
-    }
-
-    @if (!cargando && publicaciones.length === 0) {
-        <p>No hay publicaciones todavía.</p>
-    }
+      </article>
+    </div>
+  </main>
 </div>
