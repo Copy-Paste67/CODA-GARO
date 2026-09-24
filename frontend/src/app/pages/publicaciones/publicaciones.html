@@ -1,0 +1,23 @@
+<div style="max-width: 700px; margin: 40px auto;">
+    <h2>Mascotas en adopción</h2>
+
+    @if (cargando) {
+        <p>Cargando...</p>
+    }
+
+    @if (error) {
+        <p style="color: red;">{{ error }}</p>
+    }
+
+    @for (pub of publicaciones; track pub.id_adopcion) {
+        <div style="border: 1px solid #ccc; padding: 12px; margin-bottom: 8px;">
+            <strong>{{ pub.nombre_animal || 'Sin nombre' }}</strong> — {{ pub.especie }} ({{ pub.tamanio }})
+            <p>{{ pub.descripcion }}</p>
+            <em>Estado: {{ pub.estado }}</em>
+        </div>
+    }
+
+    @if (!cargando && publicaciones.length === 0) {
+        <p>No hay publicaciones todavía.</p>
+    }
+</div>
