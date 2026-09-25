@@ -1,63 +1,73 @@
-<section class="listado-page">
-  <header class="listado-page__header">
-    <h1>Donaciones</h1>
+<section class="admin-container">
+  <header class="admin-header">
+    <div>
+      <h1>📊 Panel de Donaciones (Admin)</h1>
+      <p class="admin-subtitulo">Historial y trazabilidad de donaciones directas a refugios</p>
+    </div>
   </header>
 
-  <form class="filtros" [formGroup]="formFiltros" (ngSubmit)="aplicarFiltros()">
-    <select formControlName="id_refugio">
-      <option value="">Refugio (todos)</option>
-      <option *ngFor="let refugio of refugios" [value]="refugio.id_refugio">
-        {{ refugio.nombre_refugio }}
-      </option>
-    </select>
+  <form class="filtros-admin-bar" [formGroup]="formFiltros" (ngSubmit)="aplicarFiltros()">
+    <div class="filtro-item">
+      <label>Filtrar por Refugio:</label>
+      <select formControlName="id_refugio" (change)="aplicarFiltros()">
+        <option value="">Todos los refugios</option>
+        <option *ngFor="let refugio of refugios" [value]="refugio.nombre_refugio">
+          {{ refugio.nombre_refugio }}
+        </option>
+      </select>
+    </div>
 
-    <select formControlName="estado_pago">
-      <option value="">Estado (todos)</option>
-      <option value="COMPLETADO">Completado</option>
-      <option value="PENDIENTE">Pendiente</option>
-      <option value="FALLIDO">Fallido</option>
-    </select>
-
-    <button type="submit" class="btn btn--outline">Filtrar</button>
+    <div class="filtro-item">
+      <label>Estado del Pago:</label>
+      <select formControlName="estado_pago" (change)="aplicarFiltros()">
+        <option value="">Todos los estados</option>
+        <option value="COMPLETADO">Completado</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="FALLIDO">Fallido</option>
+      </select>
+    </div>
   </form>
 
-  <table class="tabla">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Refugio</th>
-        <th>Donante</th>
-        <th>Monto</th>
-        <th>Método</th>
-        <th>Estado</th>
-        <th>Fecha</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let donacion of donaciones">
-        <td>{{ donacion.id_donacion }}</td>
-        <td>{{ donacion.nombre_refugio }}</td>
-        <td>{{ donacion.id_usuario ? donacion.nombre_donante : 'Anónimo' }}</td>
-        <td>{{ donacion.monto | currency }}</td>
-        <td>{{ donacion.metodo_pago }}</td>
-        <td>
-          <select
-            [value]="donacion.estado_pago"
-            (change)="actualizarEstado(donacion.id_donacion, $event)"
-          >
-            <option value="PENDIENTE">Pendiente</option>
-            <option value="COMPLETADO">Completado</option>
-            <option value="FALLIDO">Fallido</option>
-          </select>
-        </td>
-        <td>{{ donacion.fecha_donacion | date: 'short' }}</td>
-        <td><a [routerLink]="['/admin/donaciones', donacion.id_donacion]">Ver</a></td>
-      </tr>
+  <div class="tabla-responsive">
+    <table class="admin-tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Refugio</th>
+          <th>Donante</th>
+          <th>Monto</th>
+          <th>Método</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let donacion of donaciones">
+          <td><strong>#{{ donacion.id_donacion }}</strong></td>
+          <td>{{ donacion.nombre_refugio }}</td>
+          <td>{{ donacion.id_usuario ? donacion.nombre_donante : 'Donante Anónimo' }}</td>
+          <td class="monto-destacado">{{ donacion.monto | currency }} USD</td>
+          <td>
+            <span class="metodo-badge">{{ donacion.metodo_pago }}</span>
+          </td>
+          <td>
+            <select
+              class="select-estado"
+              [value]="donacion.estado_pago"
+              (change)="actualizarEstado(donacion.id_donacion, $event)"
+            >
+              <option value="PENDIENTE">⏳ Pendiente</option>
+              <option value="COMPLETADO">✅ Completado</option>
+              <option value="FALLIDO">❌ Fallido</option>
+            </select>
+          </td>
+          <td>{{ donacion.fecha_donacion | date: 'medium' }}</td>
+        </tr>
 
-      <tr *ngIf="donaciones.length === 0">
-        <td colspan="8" class="tabla__vacio">No hay donaciones registradas.</td>
-      </tr>
-    </tbody>
-  </table>
+        <tr *ngIf="donaciones.length === 0">
+          <td colspan="7" class="tabla-vacio">No hay registros de donaciones con los filtros aplicados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>

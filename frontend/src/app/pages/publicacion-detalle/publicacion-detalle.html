@@ -1,1 +1,135 @@
-<p>publicacion-detalle works!</p>
+<div class="detalle-page-wrapper">
+  <div class="top-nav-bar">
+    <a routerLink="/publicaciones" class="btn-volver">
+      ← Volver al Catálogo de Mascotas
+    </a>
+  </div>
+
+  <section class="detalle-container" *ngIf="mascota">
+    <div class="detalle-card">
+      <div class="detalle-galeria">
+        <img [src]="mascota.imagen || 'favicon.ico'" [alt]="mascota.nombre_mascota || mascota.nombre_animal" />
+      </div>
+
+      <div class="detalle-info">
+        <div class="info-top">
+          <span class="detalle-badge">{{ mascota.estado || mascota.estado_adopcion || 'Disponible' }}</span>
+          <span class="especie-pill">{{ mascota.especie | titlecase }}</span>
+        </div>
+
+        <h1 class="detalle-titulo">{{ mascota.nombre_mascota || mascota.nombre_animal }}</h1>
+        <p class="detalle-subtitulo">
+          {{ mascota.especie | titlecase }} • {{ mascota.tamanio || mascota.tamano }} • {{ mascota.rango_edad || mascota.edad_aproximada }}
+        </p>
+
+        <div class="detalle-specs">
+          <div class="spec-item">
+            <span class="spec-label">Edad Aproximada</span>
+            <span class="spec-value">{{ mascota.edad_aproximada || '2 años' }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Ubicación</span>
+            <span class="spec-value">{{ mascota.ciudad ? mascota.ciudad + ', ' : '' }}{{ mascota.pais || 'México' }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Tamaño</span>
+            <span class="spec-value">{{ mascota.tamanio || mascota.tamano || 'Mediano' }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Salud</span>
+            <span class="spec-value">Vacunado / Esterilizado</span>
+          </div>
+        </div>
+
+        <div class="seccion-descripcion">
+          <h3>Sobre mí</h3>
+          <p class="detalle-descripcion">{{ mascota.descripcion }}</p>
+        </div>
+
+        <div class="detalle-acciones">
+          <button type="button" class="btn-adoptar" (click)="abrirModalAdopcion()">
+            🐾 Solicitar Adopción
+          </button>
+          <button type="button" class="btn-contactar" (click)="abrirModalContacto()">
+            💬 Contactar Refugio
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Solicitar Adopción -->
+  <div class="modal-backdrop" *ngIf="mostrarModalAdopcion" (click)="cerrarModales()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Solicitud de Adopción para {{ mascota?.nombre_mascota || mascota?.nombre_animal }}</h3>
+        <button type="button" class="btn-cerrar-modal" (click)="cerrarModales()">✕</button>
+      </div>
+      <div class="modal-body" *ngIf="!solicitudEnviada">
+        <p>Completa tus datos para que el refugio o rescatista evalúe tu solicitud:</p>
+        <div class="form-grupo">
+          <label>Nombre Completo</label>
+          <input type="text" [(ngModel)]="datosSolicitud.nombre" placeholder="Tu nombre" />
+        </div>
+        <div class="form-grupo">
+          <label>Teléfono / WhatsApp</label>
+          <input type="tel" [(ngModel)]="datosSolicitud.telefono" placeholder="Ej. +52 33 1234 5678" />
+        </div>
+        <div class="form-grupo">
+          <label>¿Por qué te gustaría adoptar a esta mascota?</label>
+          <textarea rows="3" [(ngModel)]="datosSolicitud.motivo" placeholder="Cuéntanos sobre tu hogar, tiempo disponible, etc."></textarea>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" (click)="enviarSolicitud()" [disabled]="!datosSolicitud.nombre || !datosSolicitud.telefono">
+          Enviar Solicitud
+        </button>
+      </div>
+      <div class="modal-exito" *ngIf="solicitudEnviada">
+        <div class="icono-exito">✅</div>
+        <h4>¡Solicitud Enviada con Éxito!</h4>
+        <p>El refugio revisará tu información y se comunicará contigo al <strong>{{ datosSolicitud.telefono }}</strong> a la brevedad.</p>
+        <button type="button" class="btn btn-secondary mt-2" (click)="cerrarModales()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Contacto Refugio -->
+  <div class="modal-backdrop" *ngIf="mostrarModalContacto" (click)="cerrarModales()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Información de Contacto</h3>
+        <button type="button" class="btn-cerrar-modal" (click)="cerrarModales()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="contacto-item">
+          <span class="contacto-icono">🏡</span>
+          <div>
+            <strong>Refugio Encargado:</strong>
+            <p>Huellitas de Amor & Rescate Animal</p>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-icono">📱</span>
+          <div>
+            <strong>WhatsApp / Teléfono:</strong>
+            <p>+52 (33) 9876-5432</p>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-icono">✉️</span>
+          <div>
+            <strong>Correo Electrónico:</strong>
+            <p>contacto&#64;huellitasdeamor.org</p>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-icono">📍</span>
+          <div>
+            <strong>Ubicación:</strong>
+            <p>{{ mascota?.ciudad ? mascota.ciudad + ', ' : '' }}{{ mascota?.pais || 'México' }}</p>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline btn-block mt-2" (click)="cerrarModales()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

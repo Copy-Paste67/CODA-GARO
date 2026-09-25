@@ -1,28 +1,55 @@
-<section class="detalle-page" *ngIf="reporte">
-  <header class="detalle-page__header">
-    <div>
-      <h1>{{ reporte.especie }} — {{ reporte.tipo }}</h1>
-      <p class="detalle-page__meta">{{ reporte.ubicacion_suceso }} · {{ reporte.fecha_suceso | date: 'mediumDate' }}</p>
-      <span class="badge" [class]="'badge--' + reporte.estado.toLowerCase()">{{ reporte.estado }}</span>
+<div class="reporte-detalle-wrapper">
+  <div class="top-nav-bar">
+    <a routerLink="/reportes" class="btn-volver">
+      ← Volver a Reportes de Mascotas
+    </a>
+  </div>
+
+  <article class="reporte-detalle-card" *ngIf="reporte">
+    <header class="reporte-detalle-header">
+      <div class="reporte-meta-top">
+        <span class="badge" [class.badge-perdido]="reporte.tipo === 'PERDIDO'" [class.badge-encontrado]="reporte.tipo === 'ENCONTRADO'">
+          {{ reporte.tipo }}
+        </span>
+        <span class="badge badge-estado" [class.badge-resuelto]="reporte.estado === 'RESUELTO'">
+          {{ reporte.estado }}
+        </span>
+      </div>
+
+      <h1 class="reporte-titulo">{{ reporte.especie | titlecase }} — {{ reporte.tipo }}</h1>
+      <p class="reporte-subtitulo">
+        📍 <strong>Ubicación:</strong> {{ reporte.ubicacion_suceso }} &nbsp;|&nbsp; 
+        📅 <strong>Fecha:</strong> {{ reporte.fecha_suceso | date: 'mediumDate' }}
+      </p>
+
+      <div class="reporte-acciones" *ngIf="esDueno || esAdmin">
+        <a [routerLink]="['/reportes', reporte.id_reporte, 'editar']" class="btn btn-outline">✏️ Editar</a>
+        <button type="button" class="btn btn-peligro" (click)="eliminarReporte()">🗑️ Eliminar</button>
+      </div>
+    </header>
+
+    <div class="reporte-seccion">
+      <h3>Descripción y Señas Particulares</h3>
+      <p class="reporte-descripcion-texto">{{ reporte.descripcion_fisica }}</p>
     </div>
 
-    <div class="detalle-page__acciones" *ngIf="esDueno || esAdmin">
-      <a [routerLink]="['/reportes', reporte.id_reporte, 'editar']" class="btn btn--outline">Editar</a>
-      <button type="button" class="btn btn--peligro" (click)="eliminarReporte()">Eliminar</button>
+    <!-- Galería de imágenes adjuntas al reporte -->
+    <div class="reporte-seccion">
+      <h3>Fotografías</h3>
+      <app-galeria-imagenes
+        [imagenes]="imagenes"
+        [puedeAgregar]="esDueno || esAdmin"
+        [puedeEliminar]="esDueno || esAdmin"
+        [idReporte]="reporte.id_reporte"
+      ></app-galeria-imagenes>
     </div>
-  </header>
 
-  <p class="detalle-page__descripcion">{{ reporte.descripcion_fisica }}</p>
-
-  <app-galeria-imagenes
-    [imagenes]="imagenes"
-    [puedeAgregar]="esDueno || esAdmin"
-    [puedeEliminar]="esDueno || esAdmin"
-    [idReporte]="reporte.id_reporte"
-  ></app-galeria-imagenes>
-
-  <app-comentarios
-    [comentarios]="comentarios"
-    [idReporte]="reporte.id_reporte"
-  ></app-comentarios>
-</section>
+    <!-- Comentarios y Avistamientos -->
+    <div class="reporte-seccion">
+      <app-comentarios
+        [comentarios]="comentarios"
+        [idReporte]="reporte.id_reporte"
+      ></app-comentarios>
+    </div>
+  </article>
+</div>

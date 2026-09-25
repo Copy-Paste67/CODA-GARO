@@ -1,1 +1,15 @@
-<p>guias works!</p>
+<section class="guias-container">
+  <div class="guias-hero">
+    <h1>Guías de Cuidado y Rescate</h1>
+    <p>Aprende las mejores prácticas y consejos veterinarios para cuidar y rehabilitar a tus mascotas.</p>
+  </div>
+
+  <div class="grid-guias">
+    <article class="card-guia" *ngFor="let guia of guias">
+      <span class="guia-categoria">{{ guia.especie_objetivo }}</span>
+      <h3>{{ guia.titulo }}</h3>
+      <p>{{ guia.resumen }}</p>
+      <a [routerLink]="['/guias', guia.id_guia]" class="guia-link">Leer guía completa →</a>
+    </article>
+  </div>
+</section>

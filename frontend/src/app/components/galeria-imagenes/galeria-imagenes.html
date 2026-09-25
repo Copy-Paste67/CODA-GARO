@@ -1,1 +1,11 @@
-<p>galeria-imagenes works!</p>
+<div class="galeria-container">
+  <div class="galeria-grid" *ngIf="imagenes && imagenes.length > 0">
+    <div class="galeria-item" *ngFor="let img of imagenes; let i = index">
+      <img [src]="img" alt="Foto" />
+      <button *ngIf="puedeEliminar" type="button" class="btn-eliminar-img" (click)="eliminarImagen(i)">✕</button>
+    </div>
+  </div>
+  <div *ngIf="!imagenes || imagenes.length === 0" class="galeria-vacia">
+    <p>No hay imágenes disponibles.</p>
+  </div>
+</div>

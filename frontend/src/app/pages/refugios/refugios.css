@@ -1,0 +1,144 @@
+/* ==========================================================
+   PÁGINA: REFUGIOS (refugios.css)
+   ========================================================== */
+
+.refugios-container {
+  max-width: 1280px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.refugios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.refugios-title-box h1 {
+  color: var(--color-primary);
+  font-size: 2.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.refugios-title-box p {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.grid-refugios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.75rem;
+}
+
+.card-refugio {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.card-refugio:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(108, 52, 131, 0.3);
+}
+
+.refugio-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.refugio-avatar {
+  font-size: 2rem;
+  background: var(--color-primary-light);
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.refugio-nombre {
+  color: var(--color-text);
+  font-size: 1.3rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.badge-verificado {
+  display: inline-block;
+  background-color: var(--color-secondary-light);
+  color: #277855;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.refugio-ubicacion {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 0.75rem;
+}
+
+.refugio-descripcion {
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.refugio-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 1.25rem;
+  margin-top: auto;
+}
+
+.refugio-footer .btn {
+  flex: 1;
+  text-align: center;
+}
+
+.estado-mensaje {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .refugios-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refugios-header .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .grid-refugios {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,42 +1,68 @@
-<section class="form-page">
-  <h1>{{ esEdicion ? 'Editar refugio' : 'Registrar refugio' }}</h1>
-
-  <form [formGroup]="formRefugio" (ngSubmit)="guardar()">
-    <div class="form-group">
-      <label for="nombre_refugio">Nombre del refugio</label>
-      <input id="nombre_refugio" type="text" formControlName="nombre_refugio" />
-      <span class="form-error" *ngIf="formRefugio.get('nombre_refugio')?.invalid && formRefugio.get('nombre_refugio')?.touched">
-        El nombre del refugio es obligatorio.
-      </span>
+<section class="form-refugio-container">
+  <div class="form-refugio-card">
+    <div class="form-header">
+      <span class="header-badge">🏡 Red de Santuarios</span>
+      <h2>{{ esEdicion ? 'Editar Refugio' : 'Registrar Nuevo Refugio' }}</h2>
+      <p>Registra tu organización para recibir apoyo, donaciones y visibilidad para tus animales rescatados</p>
     </div>
 
-    <div class="form-group">
-      <label for="direccion">Dirección</label>
-      <input id="direccion" type="text" formControlName="direccion" />
-      <span class="form-error" *ngIf="formRefugio.get('direccion')?.invalid && formRefugio.get('direccion')?.touched">
-        La dirección es obligatoria.
-      </span>
-    </div>
+    <form [formGroup]="formRefugio" (ngSubmit)="guardar()">
+      <div class="form-grupo">
+        <label for="nombre_refugio">Nombre del Refugio o Santuario *</label>
+        <input 
+          id="nombre_refugio" 
+          type="text" 
+          formControlName="nombre_refugio" 
+          placeholder="Ej. Huellitas de Amor A.C." 
+        />
+        <span class="campo-error" *ngIf="formRefugio.get('nombre_refugio')?.invalid && formRefugio.get('nombre_refugio')?.touched">
+          El nombre del refugio es obligatorio.
+        </span>
+      </div>
 
-    <div class="form-group">
-      <label for="descripcion">Descripción</label>
-      <textarea id="descripcion" formControlName="descripcion" rows="4"></textarea>
-    </div>
+      <div class="form-grupo">
+        <label for="direccion">Dirección o Ubicación General *</label>
+        <input 
+          id="direccion" 
+          type="text" 
+          formControlName="direccion" 
+          placeholder="Ej. Av. Hidalgo 450, Col. Centro, Guadalajara" 
+        />
+        <span class="campo-error" *ngIf="formRefugio.get('direccion')?.invalid && formRefugio.get('direccion')?.touched">
+          La dirección es obligatoria.
+        </span>
+      </div>
 
-    <div class="form-group">
-      <label for="logo_url">URL del logo</label>
-      <input id="logo_url" type="url" formControlName="logo_url" placeholder="https://..." />
-    </div>
+      <div class="form-grupo">
+        <label for="logo_url">URL del Logo o Foto de Portada (Opcional)</label>
+        <input 
+          id="logo_url" 
+          type="url" 
+          formControlName="logo_url" 
+          placeholder="https://ejemplo.com/logo.png" 
+        />
+      </div>
 
-    <div class="form-page__error" *ngIf="errorFormulario">
-      {{ errorFormulario }}
-    </div>
+      <div class="form-grupo">
+        <label for="descripcion">Historia, Misión y Necesidades del Refugio</label>
+        <textarea 
+          id="descripcion" 
+          formControlName="descripcion" 
+          rows="4" 
+          placeholder="Cuéntanos cuándo se fundó el refugio, cuántos animales albergan y qué tipo de ayuda necesitan..."
+        ></textarea>
+      </div>
 
-    <div class="form-page__acciones">
-      <button type="submit" class="btn btn--primary" [disabled]="formRefugio.invalid || guardando">
-        {{ guardando ? 'Guardando...' : 'Guardar' }}
-      </button>
-      <button type="button" class="btn btn--outline" (click)="cancelar()">Cancelar</button>
-    </div>
-  </form>
+      <div class="alerta-error" *ngIf="errorFormulario">
+        {{ errorFormulario }}
+      </div>
+
+      <div class="form-acciones">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="formRefugio.invalid || guardando">
+          {{ guardando ? 'Guardando Refugio...' : (esEdicion ? 'Actualizar Datos' : '🏡 Registrar Refugio') }}
+        </button>
+      </div>
+    </form>
+  </div>
 </section>

@@ -1,0 +1,66 @@
+/* ==========================================================
+   COMPONENTE: GALERÍA DE IMÁGENES (galeria-imagenes.css)
+   ========================================================== */
+
+.galeria-container {
+  margin: 1.5rem 0;
+}
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.galeria-item {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  aspect-ratio: 4 / 3;
+  background: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+}
+
+.galeria-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.galeria-item:hover img {
+  transform: scale(1.05);
+}
+
+.btn-eliminar-img {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(214, 48, 49, 0.85);
+  color: #FFFFFF;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.btn-eliminar-img:hover {
+  background: var(--color-error);
+  transform: scale(1.1);
+}
+
+.galeria-vacia {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  background: var(--color-bg-light);
+  padding: 1.5rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}

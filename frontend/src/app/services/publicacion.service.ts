@@ -16,12 +16,10 @@ export class PublicacionService {
 
     if (filtros) {
       if (filtros.especie) params = params.set('especie', filtros.especie);
-      if (filtros.tamano) params = params.set('tamano', filtros.tamano);
-      if (filtros.radioKm) params = params.set('radio', filtros.radioKm.toString());
-      if (filtros.lat && filtros.lng) {
-        params = params.set('lat', filtros.lat.toString());
-        params = params.set('lng', filtros.lng.toString());
-      }
+      if (filtros.rango_edad) params = params.set('rango_edad', filtros.rango_edad);
+      if (filtros.pais) params = params.set('pais', filtros.pais);
+      if (filtros.ciudad) params = params.set('ciudad', filtros.ciudad);
+      if (filtros.estado) params = params.set('estado', filtros.estado);
     }
 
     return this.http.get<PublicacionAdopcion[]>(this.apiUrl, { params });

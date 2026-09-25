@@ -1,9 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  imports: [],
   selector: 'app-galeria-imagenes',
-  styleUrl: './galeria-imagenes.css',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './galeria-imagenes.html',
+  styleUrl: './galeria-imagenes.css',
 })
-export class GaleriaImagenes {}
+export class GaleriaImagenes {
+  @Input() imagenes: string[] = [];
+  @Input() puedeAgregar: boolean = false;
+  @Input() puedeEliminar: boolean = false;
+  @Input() idReporte?: number;
+  @Input() idPublicacion?: number;
+
+  eliminarImagen(index: number): void {
+    this.imagenes.splice(index, 1);
+  }
+}

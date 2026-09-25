@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
@@ -19,10 +19,21 @@ export class LoginComponent {
   password: string = '';
   error: string | null = null;
   cargando: boolean = false;
+  mostrarPassword: boolean = false;
+
+  togglePassword(): void {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
+
+  loginRapido(emailDemo: string, rolDemo: string): void {
+    this.email = emailDemo;
+    this.password = '123456';
+    this.onSubmit();
+  }
 
   onSubmit(): void {
     if (!this.email || !this.password) {
-      this.error = 'Por favor ingresa todos los campos.';
+      this.error = 'Por favor ingresa tu correo y contraseña.';
       return;
     }
 
@@ -36,7 +47,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.cargando = false;
-        this.error = err.error?.message || 'Error al iniciar sesión. Revisa tus credenciales.';
+        this.error = err.error?.message || 'Credenciales incorrectas o error de conexión con el servidor.';
       }
     });
   }

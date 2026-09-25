@@ -1,4 +1,5 @@
 // src/app/models/publicacion.model.ts
+
 export interface ImagenMascota {
   id_imagen?: number;
   url: string;
@@ -6,25 +7,31 @@ export interface ImagenMascota {
 }
 
 export interface PublicacionAdopcion {
+  id_adopcion?: number;
   id_publicacion?: number;
   id_usuario?: number;
-  nombre_mascota: string;
-  especie: 'perro' | 'gato' | 'otro';
-  edad_aproximada: string;
-  tamano: 'pequeño' | 'mediano' | 'grande';
+  nombre_animal?: string;
+  nombre_mascota?: string;
+  especie: 'PERRO' | 'GATO' | 'AVE' | 'CONEJO' | 'ROEDOR' | 'REPTIL' | 'OTRO' | string;
+  raza_aparente?: string;
+  edad_aproximada?: string;
+  rango_edad?: 'CACHORRO' | 'JOVEN' | 'ADULTO' | 'SENIOR' | string;
+  tamanio?: 'PEQUENO' | 'MEDIANO' | 'GRANDE' | string;
+  tamano?: string;
+  pais?: string;
+  ciudad?: string;
   descripcion: string;
-  estado_adopcion?: 'disponible' | 'en_proceso' | 'adoptado';
-  latitud?: number;
-  longitud?: number;
-  imagenes: ImagenMascota[] | string[];
+  estado?: 'DISPONIBLE' | 'EN_TRAMITE' | 'ADOPTADO' | string;
+  estado_adopcion?: string;
+  imagenes: (ImagenMascota | string)[];
+  fecha_creacion?: string;
   fecha_publicacion?: string;
-  distancia_km?: number; // Calculado si viene con geocoding
 }
 
 export interface FiltrosPublicacion {
   especie?: string;
-  tamano?: string;
-  radioKm?: number;
-  lat?: number;
-  lng?: number;
+  rango_edad?: string;
+  pais?: string;
+  ciudad?: string;
+  estado?: string;
 }

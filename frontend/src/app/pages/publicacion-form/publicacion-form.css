@@ -1,0 +1,202 @@
+/* ==========================================================
+   PÁGINA: FORMULARIO DE PUBLICACIÓN (publicacion-form.css)
+   ========================================================== */
+
+.form-publicacion-container {
+  max-width: 800px;
+  margin: 2.5rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.form-publicacion-card {
+  background: var(--color-surface);
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+.form-header {
+  margin-bottom: 2.25rem;
+  text-align: center;
+}
+
+.header-badge {
+  display: inline-block;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.75rem;
+}
+
+.form-header h2 {
+  color: var(--color-primary);
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+.form-header p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.form-grupo {
+  margin-bottom: 1.35rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grupo.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-grupo label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+  color: var(--color-text);
+}
+
+.form-grupo input,
+.form-grupo select,
+.form-grupo textarea {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: #FFFFFF;
+  outline: none;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.form-grupo textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus,
+.form-grupo textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.campo-error {
+  font-size: 0.78rem;
+  color: var(--color-error);
+  margin-top: 0.3rem;
+  font-weight: 600;
+}
+
+.preview-box {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: var(--color-bg-light);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.preview-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.preview-box img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-cancelar {
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-cancelar:hover {
+  background: var(--color-bg-light);
+  color: var(--color-text);
+}
+
+.btn-guardar {
+  padding: 0.85rem 2.2rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(129, 178, 154, 0.4);
+}
+
+.btn-guardar:hover:not(:disabled) {
+  background-color: var(--color-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(129, 178, 154, 0.5);
+}
+
+.btn-guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.alerta-error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-left: 4px solid var(--color-error);
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-publicacion-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .form-acciones {
+    flex-direction: column-reverse;
+  }
+
+  .form-acciones button {
+    width: 100%;
+  }
+}

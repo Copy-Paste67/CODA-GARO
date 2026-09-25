@@ -1,0 +1,91 @@
+/* ==========================================================
+   PÁGINA: GUÍAS DE CUIDADO (guias.css)
+   ========================================================== */
+
+.guias-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.guias-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.guias-hero h1 {
+  color: var(--color-primary);
+  font-size: 2.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.guias-hero p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid-guias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.75rem;
+}
+
+.card-guia {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.card-guia:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.guia-categoria {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.card-guia h3 {
+  font-size: 1.25rem;
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+}
+
+.card-guia p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.guia-link {
+  color: var(--color-secondary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.guia-link:hover {
+  color: var(--color-secondary-hover);
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .grid-guias {
+    grid-template-columns: 1fr;
+  }
+}
