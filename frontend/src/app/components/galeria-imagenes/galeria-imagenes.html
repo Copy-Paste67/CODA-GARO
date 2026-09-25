@@ -1,1 +1,35 @@
-<p>galeria-imagenes works!</p>
+<section class="galeria">
+  <div class="galeria__grid" *ngIf="imagenes.length > 0">
+    <figure class="galeria__item" *ngFor="let imagen of imagenes">
+      <img [src]="imagen.url_imagen" [alt]="'Imagen ' + imagen.id_imagen" (click)="abrirImagen(imagen)" />
+      <button
+        type="button"
+        class="galeria__eliminar"
+        *ngIf="puedeEliminar"
+        (click)="eliminarImagen(imagen.id_imagen)"
+      >
+        ✕
+      </button>
+    </figure>
+  </div>
+
+  <p class="galeria__vacio" *ngIf="imagenes.length === 0">
+    No hay imágenes agregadas todavía.
+  </p>
+
+  <form class="galeria__form" *ngIf="puedeAgregar" [formGroup]="formImagen" (ngSubmit)="agregarImagen()">
+    <input
+      type="url"
+      formControlName="url_imagen"
+      class="galeria__input"
+      placeholder="URL de la imagen"
+    />
+    <button type="submit" class="btn btn--primary btn--small" [disabled]="formImagen.invalid">
+      Agregar imagen
+    </button>
+  </form>
+
+  <div class="galeria__modal" *ngIf="imagenSeleccionada" (click)="cerrarImagen()">
+    <img [src]="imagenSeleccionada.url_imagen" alt="Vista ampliada" />
+  </div>
+</section>

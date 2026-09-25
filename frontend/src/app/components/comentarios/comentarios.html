@@ -1,1 +1,57 @@
-<p>comentarios works!</p>
+<section class="comentarios">
+  <h3 class="comentarios__titulo">Comentarios ({{ comentarios.length }})</h3>
+
+  <form class="comentarios__form" *ngIf="usuarioActual" [formGroup]="formComentario" (ngSubmit)="enviarComentario()">
+    <textarea
+      formControlName="contenido"
+      class="comentarios__input"
+      placeholder="Escribe un comentario..."
+      rows="3"
+    ></textarea>
+
+    <div class="comentarios__form-error" *ngIf="formComentario.get('contenido')?.invalid && formComentario.get('contenido')?.touched">
+      El contenido del comentario es obligatorio.
+    </div>
+
+    <button type="submit" class="btn btn--primary" [disabled]="formComentario.invalid">
+      Comentar
+    </button>
+  </form>
+
+  <p class="comentarios__login-aviso" *ngIf="!usuarioActual">
+    <a routerLink="/login">Inicia sesión</a> para dejar un comentario.
+  </p>
+
+  <ul class="comentarios__lista">
+    <li class="comentarios__item" *ngFor="let comentario of comentarios">
+      <div class="comentarios__item-header">
+        <span class="comentarios__autor">Usuario #{{ comentario.id_usuario }}</span>
+        <span class="comentarios__fecha">{{ comentario.fecha_hora | date: 'short' }}</span>
+      </div>
+
+      <p class="comentarios__contenido" *ngIf="editandoId !== comentario.id_comentario">
+        {{ comentario.contenido }}
+      </p>
+
+      <form
+        class="comentarios__form-editar"
+        *ngIf="editandoId === comentario.id_comentario"
+        [formGroup]="formEditar"
+        (ngSubmit)="guardarEdicion(comentario.id_comentario)"
+      >
+        <textarea formControlName="contenido" rows="2"></textarea>
+        <button type="submit" class="btn btn--primary btn--small">Guardar</button>
+        <button type="button" class="btn btn--outline btn--small" (click)="cancelarEdicion()">Cancelar</button>
+      </form>
+
+      <div class="comentarios__acciones" *ngIf="puedeEditar(comentario) && editandoId !== comentario.id_comentario">
+        <button type="button" (click)="iniciarEdicion(comentario)">Editar</button>
+        <button type="button" (click)="eliminarComentario(comentario.id_comentario)">Eliminar</button>
+      </div>
+    </li>
+
+    <li class="comentarios__vacio" *ngIf="comentarios.length === 0">
+      Aún no hay comentarios. Sé el primero en comentar.
+    </li>
+  </ul>
+</section>

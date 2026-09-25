@@ -1,1 +1,40 @@
-<p>navbar works!</p>
+<nav class="navbar">
+  <div class="navbar__brand">
+    <a routerLink="/">🐾 Un Hogar para Cada Mascota</a>
+  </div>
+
+  <ul class="navbar__links">
+    <li><a routerLink="/publicaciones" routerLinkActive="active">Adopciones</a></li>
+    <li><a routerLink="/reportes" routerLinkActive="active">Mascotas Perdidas</a></li>
+    <li><a routerLink="/refugios" routerLinkActive="active">Refugios</a></li>
+    <li><a routerLink="/guias" routerLinkActive="active">Guías de Rescate</a></li>
+    <li><a routerLink="/donaciones" routerLinkActive="active">Donar</a></li>
+  </ul>
+
+  <div class="navbar__auth" *ngIf="!usuarioActual">
+    <a routerLink="/login" class="btn btn--outline">Iniciar sesión</a>
+    <a routerLink="/registro" class="btn btn--primary">Registrarse</a>
+  </div>
+
+  <div class="navbar__usuario" *ngIf="usuarioActual">
+    <img
+      class="navbar__avatar"
+      [src]="usuarioActual.foto_perfil_url || 'assets/img/avatar-default.png'"
+      [alt]="usuarioActual.nombre_completo"
+    />
+
+    <div class="navbar__dropdown">
+      <button type="button" class="navbar__dropdown-toggle" (click)="toggleMenu()">
+        {{ usuarioActual.nombre_completo }}
+        <span class="navbar__rol-badge">{{ usuarioActual.rol }}</span>
+      </button>
+
+      <ul class="navbar__dropdown-menu" *ngIf="menuAbierto">
+        <li><a routerLink="/perfil">Mi perfil</a></li>
+        <li *ngIf="usuarioActual.rol === 'REFUGIO'"><a routerLink="/refugios/mi-refugio">Mi refugio</a></li>
+        <li *ngIf="usuarioActual.rol === 'ADMIN'"><a routerLink="/admin/donaciones">Panel de donaciones</a></li>
+        <li><button type="button" (click)="cerrarSesion()">Cerrar sesión</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
