@@ -9,6 +9,7 @@ import imagenRoutes from './routes/imagen.routes';
 import comentarioRoutes from './routes/comentario.routes';
 import donacionRoutes from './routes/donacion.routes';
 import guiaRescateRoutes from './routes/guiaRescate.routes';
+import solicitudAdopcionRoutes from './routes/solicitudAdopcion.routes';
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.use('/api/imagenes', imagenRoutes);
 app.use('/api/comentarios', comentarioRoutes);
 app.use('/api/donaciones', donacionRoutes);
 app.use('/api/guias', guiaRescateRoutes);
-
+app.use('/api/solicitudes', solicitudAdopcionRoutes);
 
 app.use(errorHandler);
 
