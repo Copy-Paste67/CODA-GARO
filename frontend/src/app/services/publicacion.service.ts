@@ -1,23 +1,37 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PublicacionAdopcion, FiltrosPublicacion } from '../models/publicacion.model';
 import { environment } from '../../environments/environment';
 
-export interface Publicacion {
-    id_adopcion: number;
-    nombre_animal: string | null;
-    especie: string;
-    raza_aparente: string | null;
-    tamanio: string;
-    descripcion: string;
-    estado: string;
-}
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class PublicacionService {
-    constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/publicaciones`;
 
-    listar(): Observable<Publicacion[]> {
-        return this.http.get<Publicacion[]>(`${environment.apiUrl}/publicaciones`);
+  getPublicaciones(filtros?: FiltrosPublicacion): Observable<PublicacionAdopcion[]> {
+    let params = new HttpParams();
+
+    if (filtros) {
+      if (filtros.especie) params = params.set('especie', filtros.especie);
+      if (filtros.tamano) params = params.set('tamano', filtros.tamano);
+      if (filtros.radioKm) params = params.set('radio', filtros.radioKm.toString());
+      if (filtros.lat && filtros.lng) {
+        params = params.set('lat', filtros.lat.toString());
+        params = params.set('lng', filtros.lng.toString());
+      }
     }
+
+    return this.http.get<PublicacionAdopcion[]>(this.apiUrl, { params });
+  }
+
+  getPublicacionPorId(id: number): Observable<PublicacionAdopcion> {
+    return this.http.get<PublicacionAdopcion>(`${this.apiUrl}/${id}`);
+  }
+
+  crearPublicacion(datos: FormData): Observable<PublicacionAdopcion> {
+    return this.http.post<PublicacionAdopcion>(this.apiUrl, datos);
+  }
 }
