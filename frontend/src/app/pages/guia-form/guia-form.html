@@ -1,0 +1,71 @@
+<section class="form-guia-container">
+  <div class="form-guia-card">
+    <div class="form-header">
+      <span class="header-badge">📚 Guías Educativas</span>
+      <h2>{{ esEdicion ? 'Editar Guía de Rescate' : 'Crear Nueva Guía de Rescate' }}</h2>
+      <p>Comparte conocimientos y buenas prácticas de rescate, primeros auxilios y nutrición animal</p>
+    </div>
+
+    <form [formGroup]="formGuia" (ngSubmit)="guardar()">
+      <div class="form-grupo">
+        <label for="titulo">Título de la Guía *</label>
+        <input 
+          id="titulo" 
+          type="text" 
+          formControlName="titulo" 
+          placeholder="Ej. Cuidados esenciales para cachorros recién nacidos" 
+        />
+        <span class="campo-error" *ngIf="formGuia.get('titulo')?.invalid && formGuia.get('titulo')?.touched">
+          El título es obligatorio.
+        </span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="especie_objetivo">Especie Objetivo *</label>
+          <select id="especie_objetivo" formControlName="especie_objetivo">
+            <option value="PERRO">Perro</option>
+            <option value="GATO">Gato</option>
+            <option value="AVE">Ave</option>
+            <option value="GENERAL">General / Todas las especies</option>
+            <option value="OTRO">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="imagen_portada_url">URL de Imagen de Portada (Opcional)</label>
+          <input 
+            id="imagen_portada_url" 
+            type="url" 
+            formControlName="imagen_portada_url" 
+            placeholder="https://ejemplo.com/portada.jpg" 
+          />
+        </div>
+      </div>
+
+      <div class="form-grupo full-width">
+        <label for="contenido_html">Contenido de la Guía *</label>
+        <textarea 
+          id="contenido_html" 
+          formControlName="contenido_html" 
+          rows="8" 
+          placeholder="Escribe el texto detallado de la guía, pasos a seguir, advertencias y recomendaciones..."
+        ></textarea>
+        <span class="campo-error" *ngIf="formGuia.get('contenido_html')?.invalid && formGuia.get('contenido_html')?.touched">
+          El contenido de la guía es obligatorio.
+        </span>
+      </div>
+
+      <div class="alerta-error" *ngIf="errorFormulario">
+        {{ errorFormulario }}
+      </div>
+
+      <div class="form-acciones">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="formGuia.invalid || guardando">
+          {{ guardando ? 'Guardando Guía...' : (esEdicion ? 'Actualizar Guía' : '📚 Publicar Guía') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

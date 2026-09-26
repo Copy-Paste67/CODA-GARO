@@ -1,0 +1,161 @@
+/* ==========================================================
+   PÁGINA: DONACIONES (donaciones.css)
+   ========================================================== */
+
+.donaciones-container {
+  max-width: 800px;
+  margin: 2.5rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.donaciones-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.donaciones-hero h1 {
+  color: var(--color-primary);
+  font-size: 2.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.donaciones-hero p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.donacion-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+.aviso-invitado {
+  background: var(--color-bg-light);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.aviso-invitado a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.label-montos {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.montos-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.btn-monto {
+  padding: 0.9rem;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.btn-monto:hover,
+.btn-monto.activo {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.form-grupo {
+  margin-bottom: 1.35rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grupo label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+  color: var(--color-text);
+}
+
+.form-grupo input,
+.form-grupo select {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: #FFFFFF;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.form-error {
+  font-size: 0.78rem;
+  color: var(--color-error);
+  margin-top: 0.3rem;
+  font-weight: 600;
+}
+
+.btn-donar {
+  width: 100%;
+  padding: 1.1rem;
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(129, 178, 154, 0.4);
+}
+
+.btn-donar:hover:not(:disabled) {
+  background-color: var(--color-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(129, 178, 154, 0.5);
+}
+
+.btn-donar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 600px) {
+  .montos-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .donacion-card {
+    padding: 1.5rem 1.25rem;
+  }
+}

@@ -1,0 +1,72 @@
+<section class="reportes-container">
+  <header class="reportes-header">
+    <div>
+      <h1>🚨 Mascotas Perdidas y Encontradas</h1>
+      <p class="reportes-subtitulo">Red de alerta ciudadana para ayudar a reunir mascotas con sus familias</p>
+    </div>
+    <a routerLink="/reportes/nuevo" class="btn btn-error">
+      + Crear Nuevo Reporte
+    </a>
+  </header>
+
+  <!-- Filtros -->
+  <form class="filtros-bar" [formGroup]="formFiltros" (ngSubmit)="aplicarFiltros()">
+    <div class="filtro-item">
+      <label>Tipo de reporte:</label>
+      <select formControlName="tipo" (change)="aplicarFiltros()">
+        <option value="">Todos los tipos</option>
+        <option value="PERDIDO">🔍 Perdido</option>
+        <option value="ENCONTRADO">🏠 Encontrado</option>
+      </select>
+    </div>
+
+    <div class="filtro-item">
+      <label>Especie:</label>
+      <select formControlName="especie" (change)="aplicarFiltros()">
+        <option value="">Todas las especies</option>
+        <option value="PERRO">Perro</option>
+        <option value="GATO">Gato</option>
+        <option value="AVE">Ave</option>
+        <option value="OTRO">Otro</option>
+      </select>
+    </div>
+
+    <div class="filtro-item">
+      <label>Estado:</label>
+      <select formControlName="estado" (change)="aplicarFiltros()">
+        <option value="">Cualquier estado</option>
+        <option value="BUSCANDO">Activo / Buscando</option>
+        <option value="RESUELTO">Resuelto / En Casa</option>
+      </select>
+    </div>
+  </form>
+
+  <!-- Grid de Reportes -->
+  <div class="grid-reportes" *ngIf="reportes.length > 0">
+    <article class="card-reporte" *ngFor="let reporte of reportes">
+      <div class="card-reporte-header">
+        <span class="badge" [class.badge-perdido]="reporte.tipo === 'PERDIDO'" [class.badge-encontrado]="reporte.tipo === 'ENCONTRADO'">
+          {{ reporte.tipo }}
+        </span>
+        <span class="badge badge-estado" [class.badge-resuelto]="reporte.estado === 'RESUELTO'">
+          {{ reporte.estado }}
+        </span>
+      </div>
+
+      <div class="card-reporte-body">
+        <h2>{{ reporte.especie | titlecase }}</h2>
+        <p class="reporte-ubicacion">📍 {{ reporte.ubicacion_suceso }}</p>
+        <p class="reporte-fecha">📅 {{ reporte.fecha_suceso | date: 'mediumDate' }}</p>
+        <p class="reporte-desc">{{ reporte.descripcion_fisica }}</p>
+
+        <a [routerLink]="['/reportes', reporte.id_reporte]" class="btn btn-outline btn-block mt-auto">
+          Ver reporte completo
+        </a>
+      </div>
+    </article>
+  </div>
+
+  <div class="estado-mensaje" *ngIf="reportes.length === 0">
+    <p>No se encontraron reportes con los filtros seleccionados.</p>
+  </div>
+</section>

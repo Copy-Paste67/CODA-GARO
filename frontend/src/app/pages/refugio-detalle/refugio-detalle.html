@@ -1,0 +1,70 @@
+<div class="refugio-detalle-wrapper">
+  <div class="top-nav-bar">
+    <a routerLink="/refugios" class="btn-volver">
+      ← Volver al Listado de Refugios
+    </a>
+  </div>
+
+  <section class="refugio-card-principal" *ngIf="refugio">
+    <header class="refugio-header">
+      <div class="refugio-avatar-large">🏡</div>
+      <div class="refugio-info-header">
+        <div class="refugio-name-row">
+          <h1>{{ refugio.nombre_refugio }}</h1>
+          <span class="badge-verificado" *ngIf="refugio.verificado">✓ Verificado</span>
+        </div>
+        <p class="refugio-direccion">📍 {{ refugio.direccion }}</p>
+      </div>
+
+      <div class="refugio-acciones-top" *ngIf="esDueno || esAdmin">
+        <a [routerLink]="['/refugios', refugio.id_refugio, 'editar']" class="btn btn-outline">Editar</a>
+        <button
+          type="button"
+          class="btn btn-verificar"
+          *ngIf="esAdmin"
+          (click)="alternarVerificacion()"
+        >
+          {{ refugio.verificado ? 'Quitar verificación' : 'Verificar refugio' }}
+        </button>
+        <button type="button" class="btn btn-peligro" (click)="eliminarRefugio()">Eliminar</button>
+      </div>
+    </header>
+
+    <div class="refugio-seccion">
+      <h3>Sobre este Refugio</h3>
+      <p class="refugio-descripcion-texto">{{ refugio.descripcion }}</p>
+    </div>
+
+    <div class="refugio-cta-apoyo">
+      <div>
+        <h3>¿Quieres apoyar a este refugio?</h3>
+        <p>Tus donaciones hacen posible alimentar y curar a los animales que rescatamos día a día.</p>
+      </div>
+      <a routerLink="/donaciones" class="btn btn-secondary">
+        ❤️ Hacer una Donación
+      </a>
+    </div>
+
+    <!-- Animales en adopción de este refugio -->
+    <section class="refugio-publicaciones">
+      <h3>Animales en Adopción de este Refugio</h3>
+      
+      <div class="listado-grid" *ngIf="publicaciones.length > 0">
+        <article class="mascota-card" *ngFor="let pet of publicaciones">
+          <div class="mascota-info">
+            <h4>{{ pet.nombre_animal || pet.nombre_mascota }}</h4>
+            <p>{{ pet.especie | titlecase }} • {{ pet.estado }}</p>
+            <a [routerLink]="['/publicaciones', pet.id_adopcion || pet.id_publicacion]" class="btn btn-outline btn-sm">
+              Ver detalles
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <div class="estado-mensaje-sm" *ngIf="publicaciones.length === 0">
+        <p>Este refugio actualmente está actualizando sus publicaciones de adopción.</p>
+        <a routerLink="/publicaciones" class="btn btn-outline mt-2">Ver todas las mascotas disponibles</a>
+      </div>
+    </section>
+  </section>
+</div>

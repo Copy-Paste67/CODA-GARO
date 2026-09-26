@@ -1,0 +1,77 @@
+/* ==========================================================
+   COMPONENTE: COMENTARIOS (comentarios.css)
+   ========================================================== */
+
+.comentarios-seccion {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.comentarios-seccion h3 {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.comentarios-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.comentario-box {
+  background: var(--color-bg-light);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+}
+
+.comentario-autor {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.comentario-texto {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.sin-comentarios {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.comentario-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.comentario-form textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  resize: vertical;
+  transition: var(--transition);
+}
+
+.comentario-form textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.comentario-form button {
+  align-self: flex-end;
+  padding: 0.65rem 1.5rem;
+}

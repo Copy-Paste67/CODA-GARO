@@ -1,0 +1,41 @@
+<div class="guia-detalle-wrapper">
+  <div class="top-nav-bar">
+    <a routerLink="/guias" class="btn-volver">
+      ← Volver al Listado de Guías
+    </a>
+  </div>
+
+  <article class="guia-detalle-card" *ngIf="guia">
+    <header class="guia-detalle-header">
+      <span class="guia-especie-badge">📚 {{ guia.especie_objetivo }}</span>
+      <h1 class="guia-titulo">{{ guia.titulo }}</h1>
+      <p class="guia-meta">
+        Publicado: {{ guia.fecha_publicacion | date: 'longDate' }}
+      </p>
+
+      <div class="guia-acciones" *ngIf="esAutor || esAdmin">
+        <a [routerLink]="['/guias', guia.id_guia, 'editar']" class="btn btn-outline">Editar Guía</a>
+        <button type="button" class="btn btn-peligro" (click)="eliminarGuia()">Eliminar</button>
+      </div>
+    </header>
+
+    <div class="guia-portada-box" *ngIf="guia.imagen_portada_url">
+      <img
+        class="guia-portada-img"
+        [src]="guia.imagen_portada_url"
+        [alt]="guia.titulo"
+      />
+    </div>
+
+    <div class="guia-contenido-html" [innerHTML]="guia.contenido_html"></div>
+
+    <footer class="guia-footer-cta">
+      <h3>¿Tienes dudas sobre el cuidado de un animal rescatado?</h3>
+      <p>Consulta nuestro catálogo de mascotas o apoya a un refugio local.</p>
+      <div class="guia-cta-btns">
+        <a routerLink="/publicaciones" class="btn btn-secondary">Ver Mascotas en Adopción</a>
+        <a routerLink="/donaciones" class="btn btn-primary">Apoyar Refugios</a>
+      </div>
+    </footer>
+  </article>
+</div>

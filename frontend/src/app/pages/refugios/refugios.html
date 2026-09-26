@@ -1,0 +1,45 @@
+<section class="refugios-container">
+  <header class="refugios-header">
+    <div class="refugios-title-box">
+      <h1>🏡 Refugios y Santuarios Aliados</h1>
+      <p>Organizaciones dedicadas al rescate, cuidado y rehabilitación de animales en situación vulnerable.</p>
+    </div>
+    
+    <a 
+      routerLink="/refugios/nuevo"
+      class="btn btn-primary"
+    >
+      + Registrar Mi Refugio
+    </a>
+  </header>
+
+  <div class="grid-refugios">
+    <article class="card-refugio" *ngFor="let refugio of refugios">
+      <div class="refugio-top">
+        <div class="refugio-avatar">🏡</div>
+        <div>
+          <h2 class="refugio-nombre">
+            {{ refugio.nombre_refugio }}
+          </h2>
+          <span class="badge-verificado" *ngIf="refugio.verificado">✓ Verificado</span>
+        </div>
+      </div>
+
+      <p class="refugio-ubicacion">📍 {{ refugio.direccion }}</p>
+      <p class="refugio-descripcion">{{ refugio.descripcion }}</p>
+
+      <div class="refugio-footer">
+        <a [routerLink]="['/refugios', refugio.id_refugio]" class="btn btn-outline">
+          Ver Perfil
+        </a>
+        <a routerLink="/donaciones" class="btn btn-secondary">
+          ❤️ Donar
+        </a>
+      </div>
+    </article>
+  </div>
+
+  <div class="estado-mensaje" *ngIf="refugios.length === 0">
+    <p>No hay refugios registrados por el momento.</p>
+  </div>
+</section>

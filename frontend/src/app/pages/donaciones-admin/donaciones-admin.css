@@ -1,0 +1,132 @@
+/* ==========================================================
+   PÁGINA: DONACIONES ADMIN (donaciones-admin.css)
+   ========================================================== */
+
+.admin-container {
+  max-width: 1200px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.admin-header h1 {
+  color: var(--color-primary);
+  font-size: 2.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.admin-subtitulo {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.filtros-admin-bar {
+  display: flex;
+  gap: 1.25rem;
+  background: var(--color-surface);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.filtro-item {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filtro-item label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.filtro-item select {
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  font-size: 0.92rem;
+  color: var(--color-text);
+  background-color: #FFFFFF;
+  outline: none;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.filtro-item select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.tabla-responsive {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+.admin-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-tabla th {
+  background: var(--color-bg-light);
+  color: var(--color-primary);
+  font-weight: 700;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.admin-tabla td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.admin-tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-tabla tr:hover {
+  background: rgba(108, 52, 131, 0.04);
+}
+
+.monto-destacado {
+  color: var(--color-secondary-hover);
+  font-weight: 700;
+}
+
+.metodo-badge {
+  background: var(--color-bg-light);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+}
+
+.select-estado {
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  background: #FFFFFF;
+  cursor: pointer;
+}
+
+.tabla-vacio {
+  text-align: center;
+  padding: 3rem !important;
+  color: var(--color-text-muted);
+}

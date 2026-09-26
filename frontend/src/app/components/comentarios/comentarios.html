@@ -1,0 +1,19 @@
+<section class="comentarios-seccion">
+  <h3>Comentarios ({{ comentarios?.length || 0 }})</h3>
+
+  <div class="comentarios-lista" *ngIf="comentarios && comentarios.length > 0">
+    <div class="comentario-box" *ngFor="let item of comentarios">
+      <p class="comentario-autor">{{ item.autor }}</p>
+      <p class="comentario-texto">{{ item.contenido }}</p>
+    </div>
+  </div>
+
+  <p *ngIf="!comentarios || comentarios.length === 0" class="sin-comentarios">
+    No hay comentarios todavía. ¡Sé el primero en comentar!
+  </p>
+
+  <form (ngSubmit)="agregarComentario()" class="comentario-form">
+    <textarea [(ngModel)]="nuevoComentario" name="nuevoComentario" placeholder="Escribe un comentario..." rows="3" required></textarea>
+    <button type="submit" class="btn btn-primary" [disabled]="!nuevoComentario.trim()">Comentar</button>
+  </form>
+</section>

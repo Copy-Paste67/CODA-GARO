@@ -1,28 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-    selector: 'app-login',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './login.html',
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
+  templateUrl: './login.html',
+  styleUrls: ['./login.css']
 })
-export class Login {
-    email = '';
-    password = '';
-    error = '';
+export class LoginComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-    constructor(private authService: AuthService, private router: Router) {}
+  email: string = '';
+  password: string = '';
+  error: string | null = null;
+  cargando: boolean = false;
+  mostrarPassword: boolean = false;
 
-    onSubmit(): void {
-        this.error = '';
+  togglePassword(): void {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
 
-        this.authService.login(this.email, this.password).subscribe({
-            next: () => this.router.navigate(['/publicaciones']),
-            error: () => (this.error = 'Credenciales inválidas'),
-        });
+  loginRapido(emailDemo: string, rolDemo: string): void {
+    this.email = emailDemo;
+    this.password = '123456';
+    this.onSubmit();
+  }
+
+  onSubmit(): void {
+    if (!this.email || !this.password) {
+      this.error = 'Por favor ingresa tu correo y contraseña.';
+      return;
     }
+
+    this.cargando = true;
+    this.error = null;
+
+    this.authService.login({ email: this.email, password: this.password }).subscribe({
+      next: () => {
+        this.cargando = false;
+        this.router.navigate(['/publicaciones']);
+      },
+      error: (err) => {
+        this.cargando = false;
+        this.error = err.error?.message || 'Credenciales incorrectas o error de conexión con el servidor.';
+      }
+    });
+  }
 }

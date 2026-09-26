@@ -1,0 +1,66 @@
+<section class="donaciones-container">
+  <div class="donaciones-hero">
+    <h1>Hacer una Donación</h1>
+    <p>Tu aporte ayuda directamente a cubrir alimento, vacunas y atención veterinaria para animales rescatados.</p>
+  </div>
+
+  <div class="donacion-card">
+    <p class="aviso-invitado" *ngIf="!usuarioActual">
+      ℹ️ Estás donando como invitado. <a routerLink="/login">Inicia sesión</a> para guardar tu historial.
+    </p>
+
+    <!-- Selector de montos predefinidos -->
+    <label class="label-montos">Selecciona un monto sugerido ($ USD):</label>
+    <div class="montos-selector">
+      <button 
+        type="button" 
+        *ngFor="let m of montosSugeridos" 
+        class="btn-monto"
+        [class.activo]="formDonacion.get('monto')?.value === m"
+        (click)="seleccionarMonto(m)"
+      >
+        ${{ m }}
+      </button>
+    </div>
+
+    <form [formGroup]="formDonacion" (ngSubmit)="donar()">
+      <div class="form-grupo">
+        <label for="id_refugio">Refugio o Santuario a apoyar</label>
+        <select id="id_refugio" formControlName="id_refugio">
+          <option value="">Selecciona un refugio...</option>
+          <option *ngFor="let refugio of refugios" [value]="refugio.id_refugio">
+            🏡 {{ refugio.nombre_refugio }}
+          </option>
+        </select>
+        <span class="form-error" *ngIf="formDonacion.get('id_refugio')?.invalid && formDonacion.get('id_refugio')?.touched">
+          Selecciona un refugio de la lista.
+        </span>
+      </div>
+
+      <div class="form-grupo">
+        <label for="monto">Monto personalizado ($ USD)</label>
+        <input id="monto" type="number" min="1" step="0.5" formControlName="monto" />
+        <span class="form-error" *ngIf="formDonacion.get('monto')?.invalid && formDonacion.get('monto')?.touched">
+          El monto mínimo es de $1 USD.
+        </span>
+      </div>
+
+      <div class="form-grupo">
+        <label for="metodo_pago">Método de pago</label>
+        <select id="metodo_pago" formControlName="metodo_pago">
+          <option value="TARJETA">💳 Tarjeta de Crédito / Débito</option>
+          <option value="PAYPAL">🅿️ PayPal</option>
+          <option value="TRANSFERENCIA">🏦 Transferencia Bancaria</option>
+        </select>
+      </div>
+
+      <div class="form-page__error" *ngIf="errorFormulario">
+        {{ errorFormulario }}
+      </div>
+
+      <button type="submit" class="btn-donar" [disabled]="formDonacion.invalid || procesando">
+        {{ procesando ? 'Procesando Donación Segura...' : '❤️ Completar Donación de $' + (formDonacion.get('monto')?.value || 0) }}
+      </button>
+    </form>
+  </div>
+</section>

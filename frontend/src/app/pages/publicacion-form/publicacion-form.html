@@ -1,0 +1,154 @@
+<section class="form-publicacion-container">
+  <div class="form-publicacion-card">
+    <div class="form-header">
+      <span class="header-badge">🐾 Adopciones Coda Garo</span>
+      <h2>{{ esEdicion ? 'Editar Mascota' : 'Publicar Mascota en Adopción' }}</h2>
+      <p>Completa los datos de la mascota para ayudarle a encontrar una familia amorosa</p>
+    </div>
+
+    <form [formGroup]="formPublicacion" (ngSubmit)="guardar()">
+      <!-- Fila 1: Nombre y Especie -->
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="nombre_mascota">Nombre de la mascota *</label>
+          <input 
+            id="nombre_mascota" 
+            type="text" 
+            formControlName="nombre_mascota" 
+            placeholder="Ej. Max, Luna, Bobby..." 
+          />
+          <span class="campo-error" *ngIf="formPublicacion.get('nombre_mascota')?.invalid && formPublicacion.get('nombre_mascota')?.touched">
+            El nombre es requerido.
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="especie">Especie *</label>
+          <select id="especie" formControlName="especie">
+            <option value="PERRO">🐶 Perro</option>
+            <option value="GATO">🐱 Gato</option>
+            <option value="AVE">🦜 Ave</option>
+            <option value="CONEJO">🐰 Conejo</option>
+            <option value="ROEDOR">🐹 Roedor</option>
+            <option value="REPTIL">🦎 Reptil</option>
+            <option value="OTRO">🐾 Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 2: Rango de Edad y Edad Aproximada -->
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="rango_edad">Rango de Edad *</label>
+          <select id="rango_edad" formControlName="rango_edad">
+            <option value="CACHORRO">Cachorro / Cría (0 - 1 año)</option>
+            <option value="JOVEN">Joven (1 - 3 años)</option>
+            <option value="ADULTO">Adulto (3 - 7 años)</option>
+            <option value="SENIOR">Senior (+7 años)</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="edad_aproximada">Edad Aproximada *</label>
+          <input 
+            id="edad_aproximada" 
+            type="text" 
+            formControlName="edad_aproximada" 
+            placeholder="Ej. 1 año y 4 meses" 
+          />
+        </div>
+      </div>
+
+      <!-- Fila 3: Tamaño y Raza -->
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="tamano">Tamaño *</label>
+          <select id="tamano" formControlName="tamano">
+            <option value="PEQUENO">Pequeño</option>
+            <option value="MEDIANO">Mediano</option>
+            <option value="GRANDE">Grande</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="raza_aparente">Raza aparente / Mestizo</label>
+          <input 
+            id="raza_aparente" 
+            type="text" 
+            formControlName="raza_aparente" 
+            placeholder="Ej. Mestizo, Labrador, Siames..." 
+          />
+        </div>
+      </div>
+
+      <!-- Fila 4: País y Ciudad -->
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="pais">País *</label>
+          <select id="pais" formControlName="pais">
+            <option value="México">México</option>
+            <option value="Colombia">Colombia</option>
+            <option value="España">España</option>
+            <option value="Argentina">Argentina</option>
+            <option value="Chile">Chile</option>
+            <option value="Perú">Perú</option>
+            <option value="Costa Rica">Costa Rica</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="ciudad">Ciudad *</label>
+          <input 
+            id="ciudad" 
+            type="text" 
+            formControlName="ciudad" 
+            placeholder="Ej. Guadalajara, Bogotá, CDMX..." 
+          />
+          <span class="campo-error" *ngIf="formPublicacion.get('ciudad')?.invalid && formPublicacion.get('ciudad')?.touched">
+            La ciudad es requerida.
+          </span>
+        </div>
+      </div>
+
+      <!-- Fila 5: URL de Foto e imagen preview -->
+      <div class="form-grupo full-width">
+        <label for="imagen_url">URL de la Foto Principal</label>
+        <input 
+          id="imagen_url" 
+          type="url" 
+          formControlName="imagen_url" 
+          placeholder="https://ejemplo.com/foto-mascota.jpg" 
+        />
+        <div class="preview-box" *ngIf="formPublicacion.get('imagen_url')?.value">
+          <p class="preview-label">Vista previa:</p>
+          <img [src]="formPublicacion.get('imagen_url')?.value" alt="Preview Mascota" (error)="imagenError = true" />
+        </div>
+      </div>
+
+      <!-- Fila 6: Descripción -->
+      <div class="form-grupo full-width">
+        <label for="descripcion">Historia, personalidad y salud *</label>
+        <textarea 
+          id="descripcion" 
+          formControlName="descripcion" 
+          placeholder="Describe su comportamiento, si convive con niños u otros animales, vacunas aplicadas, etc." 
+          rows="4"
+        ></textarea>
+        <span class="campo-error" *ngIf="formPublicacion.get('descripcion')?.invalid && formPublicacion.get('descripcion')?.touched">
+          Escribe una breve descripción (mínimo 10 caracteres).
+        </span>
+      </div>
+
+      <div class="alerta-error" *ngIf="errorFormulario">
+        {{ errorFormulario }}
+      </div>
+
+      <div class="form-acciones">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="formPublicacion.invalid || guardando">
+          {{ guardando ? 'Guardando Mascota...' : '🐾 Publicar Mascota' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

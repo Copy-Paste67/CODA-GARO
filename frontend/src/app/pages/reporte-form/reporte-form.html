@@ -1,0 +1,89 @@
+<section class="form-reporte-container">
+  <div class="form-reporte-card">
+    <div class="form-header">
+      <span class="header-badge">🚨 Alerta Animal</span>
+      <h2>{{ esEdicion ? 'Editar Reporte de Mascota' : 'Reportar Mascota Perdida o Encontrada' }}</h2>
+      <p>Publica un aviso para que la comunidad y los rescatistas puedan ayudar en la búsqueda</p>
+    </div>
+
+    <form [formGroup]="formReporte" (ngSubmit)="guardar()">
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="tipo">¿Qué deseas reportar? *</label>
+          <select id="tipo" formControlName="tipo">
+            <option value="PERDIDO">🔍 Perdí a mi mascota</option>
+            <option value="ENCONTRADO">🏠 Encontré una mascota extraviada</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="especie">Especie *</label>
+          <select id="especie" formControlName="especie">
+            <option value="PERRO">🐶 Perro</option>
+            <option value="GATO">🐱 Gato</option>
+            <option value="AVE">🦜 Ave</option>
+            <option value="OTRO">🐾 Otro animal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="ubicacion_suceso">Lugar / Colonia / Ciudad *</label>
+          <input 
+            id="ubicacion_suceso" 
+            type="text" 
+            formControlName="ubicacion_suceso" 
+            placeholder="Ej. Parque Central, Col. Roma, CDMX" 
+          />
+          <span class="campo-error" *ngIf="formReporte.get('ubicacion_suceso')?.invalid && formReporte.get('ubicacion_suceso')?.touched">
+            La ubicación es obligatoria.
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="fecha_suceso">Fecha del Suceso *</label>
+          <input 
+            id="fecha_suceso" 
+            type="date" 
+            formControlName="fecha_suceso" 
+          />
+        </div>
+      </div>
+
+      <div class="form-grupo full-width">
+        <label for="telefono_contacto">Teléfono o WhatsApp de Contacto *</label>
+        <input 
+          id="telefono_contacto" 
+          type="tel" 
+          formControlName="telefono_contacto" 
+          placeholder="+52 33 9876 5432" 
+        />
+      </div>
+
+      <div class="form-grupo full-width">
+        <label for="descripcion_fisica">Descripción física y señas particulares *</label>
+        <textarea 
+          id="descripcion_fisica" 
+          formControlName="descripcion_fisica" 
+          placeholder="Color de pelaje, tamaño, collar, placa, cicatrices, temperamento, etc."
+          rows="4"
+        ></textarea>
+        <span class="campo-error" *ngIf="formReporte.get('descripcion_fisica')?.invalid && formReporte.get('descripcion_fisica')?.touched">
+          La descripción física es obligatoria.
+        </span>
+      </div>
+
+      <div class="alerta-error" *ngIf="errorFormulario">
+        {{ errorFormulario }}
+      </div>
+
+      <div class="form-acciones">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-guardar-reporte" [disabled]="formReporte.invalid || guardando">
+          {{ guardando ? 'Guardando...' : (esEdicion ? 'Actualizar Reporte' : '🚨 Publicar Reporte') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

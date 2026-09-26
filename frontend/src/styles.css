@@ -1,1 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   CODA-GARO - SISTEMA DE DISEÑO GLOBAL
+   Paleta de Colores:
+   #F5E8D6 (Crema / Fondo suave)
+   #6C3483 (Púrpura / Primario)
+   #2D3436 (Gris Carbón / Texto principal y contraste)
+   #81B29A (Verde Salvia / Secundario y Acento)
+   ========================================================================== */
+
+:root {
+  --color-bg: #F5E8D6;
+  --color-bg-light: #FAF4EB;
+  --color-surface: #FFFFFF;
+  
+  --color-primary: #6C3483;
+  --color-primary-hover: #562a69;
+  --color-primary-light: rgba(108, 52, 131, 0.1);
+  
+  --color-secondary: #81B29A;
+  --color-secondary-hover: #6ea389;
+  --color-secondary-light: rgba(129, 178, 154, 0.18);
+
+  --color-text: #2D3436;
+  --color-text-muted: #636e72;
+  --color-text-inverse: #FFFFFF;
+
+  --color-border: rgba(45, 52, 54, 0.12);
+  --color-error: #D63031;
+  --color-error-bg: #FFEAE8;
+  --color-success: #27AE60;
+  
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 2px 6px rgba(45, 52, 54, 0.06);
+  --shadow-md: 0 6px 18px rgba(45, 52, 54, 0.09);
+  --shadow-lg: 0 12px 28px rgba(45, 52, 54, 0.14);
+  
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografía */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #c8baaa;
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}

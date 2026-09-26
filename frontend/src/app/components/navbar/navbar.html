@@ -1,0 +1,40 @@
+<header class="navbar">
+  <div class="nav-container">
+    <a routerLink="/" class="nav-brand" (click)="closeMenu()">
+      <span class="logo-icon">🐾</span>
+      <span class="logo-text">Coda Garo</span>
+    </a>
+
+    <!-- Botón hamburguesa móvil -->
+    <button class="nav-toggle" (click)="toggleMenu()" aria-label="Abrir menú de navegación" [class.is-open]="isMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Enlaces de navegación -->
+    <nav class="nav-menu" [class.is-open]="isMenuOpen">
+      <a routerLink="/publicaciones" routerLinkActive="active" class="nav-link" (click)="closeMenu()">Mascotas</a>
+      <a routerLink="/reportes" routerLinkActive="active" class="nav-link" (click)="closeMenu()">Reportes</a>
+      <a routerLink="/refugios" routerLinkActive="active" class="nav-link" (click)="closeMenu()">Refugios</a>
+      <a routerLink="/guias" routerLinkActive="active" class="nav-link" (click)="closeMenu()">Guías</a>
+      <a routerLink="/donaciones" routerLinkActive="active" class="nav-link" (click)="closeMenu()">Donaciones</a>
+      <a routerLink="/nosotros" routerLinkActive="active" class="nav-link" (click)="closeMenu()">Nosotros</a>
+      
+      <!-- Acciones de Usuario / Auth -->
+      <div class="nav-actions" *ngIf="!authService.currentUser()">
+        <a routerLink="/login" class="btn btn-outline" (click)="closeMenu()">Iniciar Sesión</a>
+        <a routerLink="/registro" class="btn btn-primary" (click)="closeMenu()">Registrarse</a>
+      </div>
+
+      <div class="nav-user-actions" *ngIf="authService.currentUser() as user">
+        <div class="user-badge" title="Rol: {{ user.rol }}">
+          <span class="user-avatar">👤</span>
+          <span class="user-name">{{ user.nombre_completo || user.email }}</span>
+          <span class="user-role-pill">{{ user.rol }}</span>
+        </div>
+        <button type="button" class="btn btn-logout" (click)="logout()">Salir</button>
+      </div>
+    </nav>
+  </div>
+</header>

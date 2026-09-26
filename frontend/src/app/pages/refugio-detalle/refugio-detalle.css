@@ -1,0 +1,213 @@
+/* ==========================================================
+   PÁGINA: DETALLE DE REFUGIO (refugio-detalle.css)
+   ========================================================== */
+
+.refugio-detalle-wrapper {
+  max-width: 1100px;
+  margin: 1.5rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.top-nav-bar {
+  margin-bottom: 1.5rem;
+}
+
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+
+.btn-volver:hover {
+  background: var(--color-primary-light);
+}
+
+.refugio-card-principal {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  padding: 2.5rem;
+}
+
+.refugio-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.refugio-avatar-large {
+  font-size: 3rem;
+  background: var(--color-primary-light);
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.refugio-info-header {
+  flex: 1;
+}
+
+.refugio-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.refugio-name-row h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--color-text);
+}
+
+.badge-verificado {
+  background-color: var(--color-secondary-light);
+  color: #277855;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.refugio-direccion {
+  margin: 0;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.refugio-acciones-top {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-verificar {
+  background: none;
+  border: 1.5px solid var(--color-secondary);
+  color: #277855;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-verificar:hover {
+  background: var(--color-secondary);
+  color: #FFFFFF;
+}
+
+.btn-peligro {
+  background: none;
+  border: 1.5px solid var(--color-error);
+  color: var(--color-error);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-peligro:hover {
+  background: var(--color-error);
+  color: #FFFFFF;
+}
+
+.refugio-seccion {
+  margin-bottom: 2rem;
+}
+
+.refugio-seccion h3 {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.refugio-descripcion-texto {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.refugio-cta-apoyo {
+  background: var(--color-bg-light);
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.refugio-cta-apoyo h3 {
+  margin: 0 0 0.3rem 0;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+}
+
+.refugio-cta-apoyo p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.refugio-publicaciones h3 {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.estado-mensaje-sm {
+  background: var(--color-bg-light);
+  padding: 2rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .refugio-card-principal {
+    padding: 1.5rem;
+  }
+
+  .refugio-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refugio-cta-apoyo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refugio-cta-apoyo .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
