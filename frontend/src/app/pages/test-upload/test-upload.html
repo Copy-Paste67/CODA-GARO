@@ -1,0 +1,34 @@
+<div style="max-width: 500px; margin: 40px auto;">
+    <h2>Prueba de subida de imagen</h2>
+
+    <div style="margin-bottom: 16px;">
+        <label>ID de publicación (id_adopcion) para asociar:</label>
+        <input type="number" [(ngModel)]="idAdopcion" name="idAdopcion" />
+    </div>
+
+    <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+
+    @if (subiendo) {
+        <p>Subiendo a Cloudinary...</p>
+    }
+
+    @if (urlSubida) {
+        <div style="margin-top: 16px;">
+            <p>✅ Subida exitosa:</p>
+            <img [src]="urlSubida" style="max-width: 100%; border-radius: 8px;" />
+            <p style="word-break: break-all; font-size: 12px;">{{ urlSubida }}</p>
+
+            <button (click)="guardarEnBackend()" [disabled]="guardando">
+                {{ guardando ? 'Guardando...' : 'Guardar en mi base de datos' }}
+            </button>
+        </div>
+    }
+
+    @if (mensaje) {
+        <p style="color: green;">{{ mensaje }}</p>
+    }
+
+    @if (error) {
+        <p style="color: red;">{{ error }}</p>
+    }
+</div>

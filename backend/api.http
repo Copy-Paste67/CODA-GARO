@@ -28,7 +28,6 @@ Content-Type: application/json
 }
 
 ### Login - adoptante
-# @name loginAdoptante
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -38,7 +37,6 @@ Content-Type: application/json
 }
 
 ### Login - refugio
-# @name loginRefugio
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -47,26 +45,14 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Perfil (ruta protegida) - usa el token que te devolvio el login de arriba
-@tokenAdoptante = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJyb2wiOiJBRE9QVEFOVEUiLCJpYXQiOjE3OTAxNDMxMjAsImV4cCI6MTc5MDE3MTkyMH0.Lxvw2SPw7V4RfisxDrk8F3XLkSMxrNXCtWFt7wDKJgc
-@tokenRefugio = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyLCJyb2wiOiJSRUZVR0lPIiwiaWF0IjoxNzkwMTQzMjI2LCJleHAiOjE3OTAxNzIwMjZ9.s7Fsg4PbYbK51Wn5QISdci14574efb47xbLolAvt2jg
-
-GET {{baseUrl}}/api/auth/perfil
-Authorization: Bearer {{tokenAdoptante}}
+### Pega los tokens aqui despues de correr los logins de arriba
+@tokenAdoptante = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJyb2wiOiJBRE9QVEFOVEUiLCJpYXQiOjE3OTA0NDE5NDMsImV4cCI6MTc5MDQ3MDc0M30.O1vQ2vQ_R8LWIUkM7ypGlJuvkw7c-XrA8PHNoysl0ao
+@tokenRefugio = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyLCJyb2wiOiJSRUZVR0lPIiwiaWF0IjoxNzkwNDQxNjQ0LCJleHAiOjE3OTA0NzA0NDR9.ZuYwW7snKCRGXA2aIzIluYFE8AZY_lSfi27SIt8tvD4
+@tokenAdmin = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjozLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc5MDQ0MTY2MSwiZXhwIjoxNzkwNDcwNDYxfQ.x8Ni64N1xSa3Q9_SCyeASCml-_Ho4oQ1tK4KWKeUaRg
 
 ### ==================== REFUGIOS ====================
 
-### Crear refugio (debe fallar 403 con token de adoptante)
-POST {{baseUrl}}/api/refugios
-Content-Type: application/json
-Authorization: Bearer {{tokenAdoptante}}
-
-{
-  "nombre_refugio": "Refugio Test",
-  "direccion": "Zona 1, Guatemala"
-}
-
-### Crear refugio (debe funcionar 201 con token de refugio)
+### Crear refugio (solo REFUGIO)
 POST {{baseUrl}}/api/refugios
 Content-Type: application/json
 Authorization: Bearer {{tokenRefugio}}
@@ -78,9 +64,6 @@ Authorization: Bearer {{tokenRefugio}}
 
 ### Listar refugios (publico)
 GET {{baseUrl}}/api/refugios
-
-### Obtener refugio por id
-GET {{baseUrl}}/api/refugios/1
 
 ### ==================== PUBLICACIONES DE ADOPCION ====================
 
@@ -101,12 +84,6 @@ Authorization: Bearer {{tokenRefugio}}
 ### Listar publicaciones (publico)
 GET {{baseUrl}}/api/publicaciones
 
-### Listar con filtro por especie
-GET {{baseUrl}}/api/publicaciones?especie=PERRO
-
-### Obtener publicacion por id
-GET {{baseUrl}}/api/publicaciones/1
-
 ### ==================== REPORTES DE MASCOTA ====================
 
 ### Crear reporte (cualquier usuario logueado)
@@ -125,17 +102,246 @@ Authorization: Bearer {{tokenAdoptante}}
 ### Listar reportes (publico)
 GET {{baseUrl}}/api/reportes
 
-### Listar con filtro por tipo
-GET {{baseUrl}}/api/reportes?tipo=PERDIDO
+### ==================== COMENTARIOS ====================
+### id_adopcion o id_reporte: manda solo el que aplique, el otro se puede omitir/null
 
-### Crear reporte sin token (debe fallar 401)
-POST {{baseUrl}}/api/reportes
+### Crear comentario en una publicacion de adopcion (requiere token)
+POST {{baseUrl}}/api/comentarios
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "id_adopcion": 1,
+  "contenido": "¿Sigue disponible este perrito?"
+}
+
+### Crear comentario en un reporte (requiere token)
+POST {{baseUrl}}/api/comentarios
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "id_reporte": 1,
+  "contenido": "Yo lo vi por esa zona ayer"
+}
+
+### Listar comentarios (publico)
+GET {{baseUrl}}/api/comentarios
+
+### Ver uno por id
+GET {{baseUrl}}/api/comentarios/1
+
+### Actualizar comentario (requiere token, debe ser el dueño)
+PUT {{baseUrl}}/api/comentarios/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "contenido": "Editado: ¿sigue disponible?"
+}
+
+### Eliminar comentario (requiere token, debe ser el dueño)
+DELETE {{baseUrl}}/api/comentarios/1
+Authorization: Bearer {{tokenAdoptante}}
+
+### Crear comentario SIN token (debe fallar 401)
+POST {{baseUrl}}/api/comentarios
 Content-Type: application/json
 
 {
-  "tipo": "ENCONTRADO",
-  "especie": "PERRO",
-  "descripcion_fisica": "Test",
-  "ubicacion_suceso": "Test",
-  "fecha_suceso": "2026-09-20"
+  "id_adopcion": 1,
+  "contenido": "Test sin token"
 }
+
+### ==================== DONACIONES ====================
+
+### Donacion anonima (publica, SIN token)
+POST {{baseUrl}}/api/donaciones/anonima
+Content-Type: application/json
+
+{
+  "id_refugio": 1,
+  "monto": 100.00,
+  "metodo_pago": "TARJETA"
+}
+
+### Donacion autenticada (requiere token)
+POST {{baseUrl}}/api/donaciones
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "id_refugio": 1,
+  "monto": 50.00,
+  "metodo_pago": "PAYPAL"
+}
+
+### Listar donaciones - debe FALLAR 403 con token de adoptante (solo ADMIN)
+GET {{baseUrl}}/api/donaciones
+Authorization: Bearer {{tokenAdoptante}}
+
+### Listar donaciones - con token de ADMIN (debe funcionar)
+GET {{baseUrl}}/api/donaciones
+Authorization: Bearer {{tokenAdmin}}
+
+### Ver una donacion por id
+GET {{baseUrl}}/api/donaciones/1
+Authorization: Bearer {{tokenAdoptante}}
+
+### Actualizar estado de donacion - solo ADMIN
+PATCH {{baseUrl}}/api/donaciones/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+{
+  "estado_pago": "COMPLETADO"
+}
+
+### ==================== GUIAS DE RESCATE ====================
+
+### Crear guia - debe FALLAR 403 con token de refugio (solo ADMIN)
+POST {{baseUrl}}/api/guias
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "titulo": "Como rescatar un gato de un arbol",
+  "especie_objetivo": "GATO",
+  "contenido_html": "<p>Paso 1: mantén la calma...</p>"
+}
+
+### Crear guia - con token de ADMIN (debe funcionar)
+POST {{baseUrl}}/api/guias
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+{
+  "titulo": "Como rescatar un gato de un arbol",
+  "especie_objetivo": "GATO",
+  "contenido_html": "<p>Paso 1: mantén la calma...</p>"
+}
+
+### Listar guias (publico)
+GET {{baseUrl}}/api/guias
+
+### Ver una por id
+GET {{baseUrl}}/api/guias/1
+
+### Actualizar guia (cualquier usuario logueado - OJO, revisar si esto es correcto)
+PUT {{baseUrl}}/api/guias/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "titulo": "Titulo editado",
+  "especie_objetivo": "GATO",
+  "contenido_html": "<p>Contenido editado</p>"
+}
+
+### ==================== IMAGENES ====================
+### id_adopcion o id_reporte: manda solo el que aplique
+
+### Subir imagen para una publicacion (requiere token)
+POST {{baseUrl}}/api/imagenes
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "url_imagen": "https://ejemplo.com/foto-mascota.jpg",
+  "id_adopcion": 1
+}
+
+### Subir imagen para un reporte (requiere token)
+POST {{baseUrl}}/api/imagenes
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "url_imagen": "https://ejemplo.com/foto-reporte.jpg",
+  "id_reporte": 1
+}
+
+### Listar imagenes (publico)
+GET {{baseUrl}}/api/imagenes
+
+### Ver una por id
+GET {{baseUrl}}/api/imagenes/1
+
+### Eliminar imagen (requiere token - OJO, revisar si valida dueño)
+DELETE {{baseUrl}}/api/imagenes/1
+Authorization: Bearer {{tokenRefugio}}
+
+### ==================== SOLICITUDES DE ADOPCION ====================
+
+### Crear solicitud (adoptante pide adoptar una publicacion que NO es suya)
+POST {{baseUrl}}/api/solicitudes
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "id_adopcion": 1,
+  "mensaje": "Me encantaria adoptar a este perrito, tengo patio grande"
+}
+
+### Intentar solicitar la misma publicacion de nuevo (debe fallar 409 - duplicado)
+POST {{baseUrl}}/api/solicitudes
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "id_adopcion": 1,
+  "mensaje": "Otro intento"
+}
+
+### El dueño del refugio intenta solicitar su PROPIA publicacion (debe fallar 400)
+POST {{baseUrl}}/api/solicitudes
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "id_adopcion": 1,
+  "mensaje": "Quiero adoptar mi propia mascota"
+}
+
+### Listar mis solicitudes (como adoptante, solo ve las suyas)
+GET {{baseUrl}}/api/solicitudes
+Authorization: Bearer {{tokenAdoptante}}
+
+### Listar TODAS las solicitudes (como ADMIN, ve todo)
+GET {{baseUrl}}/api/solicitudes
+Authorization: Bearer {{tokenAdmin}}
+
+### Ver una solicitud por id (dueño de la publicacion SI puede verla)
+GET {{baseUrl}}/api/solicitudes/1
+Authorization: Bearer {{tokenRefugio}}
+
+### El refugio (dueño de la publicacion) APRUEBA la solicitud
+PATCH {{baseUrl}}/api/solicitudes/1
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "estado": "APROBADA"
+}
+
+### Un adoptante intenta cambiar el estado (debe fallar 403 - no es el dueño de la publicacion)
+PATCH {{baseUrl}}/api/solicitudes/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdoptante}}
+
+{
+  "estado": "RECHAZADA"
+}
+
+### Estado invalido (debe fallar 400)
+PATCH {{baseUrl}}/api/solicitudes/1
+Content-Type: application/json
+Authorization: Bearer {{tokenRefugio}}
+
+{
+  "estado": "ALGO_QUE_NO_EXISTE"
+}
+
+### El adoptante cancela su propia solicitud
+DELETE {{baseUrl}}/api/solicitudes/1
+Authorization: Bearer {{tokenAdoptante}}
