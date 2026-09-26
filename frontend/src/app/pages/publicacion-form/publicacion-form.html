@@ -110,20 +110,48 @@
         </div>
       </div>
 
-      <!-- Fila 5: URL de Foto e imagen preview -->
-      <div class="form-grupo full-width">
-        <label for="imagen_url">URL de la Foto Principal</label>
-        <input 
-          id="imagen_url" 
-          type="url" 
-          formControlName="imagen_url" 
-          placeholder="https://ejemplo.com/foto-mascota.jpg" 
-        />
-        <div class="preview-box" *ngIf="formPublicacion.get('imagen_url')?.value">
-          <p class="preview-label">Vista previa:</p>
-          <img [src]="formPublicacion.get('imagen_url')?.value" alt="Preview Mascota" (error)="imagenError = true" />
-        </div>
+      <!-- Fila 5: Foto de la mascota -->
+<div class="form-grupo full-width">
+  <label>Foto de la mascota</label>
+
+  @if (!imagenParaRecortar() && !imagenUrl()) {
+    <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+  }
+
+  <!-- El recortador aparece solo mientras el usuario está ajustando el recuadro -->
+  @if (imagenParaRecortar()) {
+    <div class="cropper-wrapper">
+      <image-cropper
+        [imageBase64]="imagenParaRecortar()!"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="4 / 3"
+        [resizeToWidth]="800"
+        format="jpeg"
+        (imageCropped)="onImageCropped($event)"
+      ></image-cropper>
+
+      <div class="cropper-acciones">
+        <button type="button" class="btn-cancelar" (click)="cancelarRecorte()">Cancelar</button>
+        <button type="button" class="btn-guardar" (click)="confirmarRecorte()" [disabled]="subiendoImagen()">
+          {{ subiendoImagen() ? 'Subiendo...' : 'Usar esta foto' }}
+        </button>
       </div>
+    </div>
+  }
+
+  @if (errorImagen()) {
+    <p class="campo-error">{{ errorImagen() }}</p>
+  }
+
+  <!-- Vista final, ya subida -->
+  @if (imagenUrl()) {
+    <div class="preview-box">
+      <p class="preview-label">Foto seleccionada:</p>
+      <img [src]="imagenUrl()" alt="Preview Mascota" />
+      <button type="button" class="btn-cancelar" (click)="quitarImagen()">Cambiar foto</button>
+    </div>
+  }
+</div>
 
       <!-- Fila 6: Descripción -->
       <div class="form-grupo full-width">

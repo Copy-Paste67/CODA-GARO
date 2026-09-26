@@ -38,9 +38,6 @@ export const routes: Routes = [
   { path: 'guias/:id', component: GuiaDetalle },
   { path: 'donaciones', component: Donaciones },
   { path: 'admin/donaciones', component: DonacionesAdmin },
-  { path: '**', redirectTo: 'publicaciones' }
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: Login },
-    { path: 'publicaciones', component: Publicaciones },
-    { path: 'test-upload', component: TestUpload },
+  { path: 'test-upload', component: TestUpload },
+  { path: '**', redirectTo: 'publicaciones' },
 ];

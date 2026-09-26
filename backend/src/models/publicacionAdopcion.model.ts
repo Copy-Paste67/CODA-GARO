@@ -12,6 +12,7 @@ export interface PublicacionAdopcion extends RowDataPacket {
     descripcion: string;
     estado: 'DISPONIBLE' | 'EN_TRAMITE' | 'ADOPTADO';
     fecha_creacion: Date;
+    imagen_principal: string | null; // <- nuevo
 }
 
 interface Filtros {
@@ -50,25 +51,36 @@ export const crearPublicacion = async (
 };
 
 export const listarPublicaciones = async (filtros: Filtros): Promise<PublicacionAdopcion[]> => {
-    let query = `SELECT * FROM publicacion_adopcion WHERE 1 = 1`;
+    let query = `
+        SELECT pa.*, img.url_imagen AS imagen_principal
+        FROM publicacion_adopcion pa
+        LEFT JOIN (
+            SELECT id_adopcion, MIN(id_imagen) AS id_imagen
+            FROM imagen
+            WHERE id_adopcion IS NOT NULL
+            GROUP BY id_adopcion
+        ) primera ON primera.id_adopcion = pa.id_adopcion
+        LEFT JOIN imagen img ON img.id_imagen = primera.id_imagen
+        WHERE 1 = 1
+    `;
     const params: string[] = [];
 
     if (filtros.especie) {
-        query += ` AND especie = ?`;
+        query += ` AND pa.especie = ?`;
         params.push(filtros.especie);
     }
 
     if (filtros.tamanio) {
-        query += ` AND tamanio = ?`;
+        query += ` AND pa.tamanio = ?`;
         params.push(filtros.tamanio);
     }
 
     if (filtros.estado) {
-        query += ` AND estado = ?`;
+        query += ` AND pa.estado = ?`;
         params.push(filtros.estado);
     }
 
-    query += ` ORDER BY fecha_creacion DESC`;
+    query += ` ORDER BY pa.fecha_creacion DESC`;
 
     const [rows] = await pool.query<PublicacionAdopcion[]>(query, params);
     return rows;

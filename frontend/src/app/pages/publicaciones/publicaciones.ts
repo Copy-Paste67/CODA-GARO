@@ -136,24 +136,27 @@ export class PublicacionesComponent implements OnInit {
       ciudad: this.filtroCiudad || undefined
     };
 
-    this.publicacionService.getPublicaciones(filtros).subscribe({
+      this.publicacionService.getPublicaciones(filtros).subscribe({
       next: (data) => {
-        if (data && data.length > 0) {
-          this.publicaciones.set(data);
-          this.aplicarFiltrosLocales(data);
-        } else {
-          this.publicaciones.set(this.mockMascotas);
-          this.aplicarFiltrosLocales(this.mockMascotas);
-        }
-        this.cargando.set(false);
+          if (data && data.length > 0) {
+              const dataConImagenes = data.map((pet: any) => ({
+                  ...pet,
+                  imagenes: pet.imagen_principal ? [pet.imagen_principal] : [],
+              }));
+              this.publicaciones.set(dataConImagenes);
+              this.aplicarFiltrosLocales(dataConImagenes);
+          } else {
+              this.publicaciones.set(this.mockMascotas);
+              this.aplicarFiltrosLocales(this.mockMascotas);
+          }
+          this.cargando.set(false);
       },
       error: () => {
-        // En caso de que el backend no responda, usamos los datos locales para no romper la experiencia
-        this.publicaciones.set(this.mockMascotas);
-        this.aplicarFiltrosLocales(this.mockMascotas);
-        this.cargando.set(false);
-      }
-    });
+          this.publicaciones.set(this.mockMascotas);
+          this.aplicarFiltrosLocales(this.mockMascotas);
+          this.cargando.set(false);
+      },
+  });
   }
 
   aplicarFiltros(): void {

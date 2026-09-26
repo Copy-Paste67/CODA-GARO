@@ -29,6 +29,17 @@ export class PublicacionService {
     return this.http.get<PublicacionAdopcion>(`${this.apiUrl}/${id}`);
   }
 
+  crear(datos: {
+    nombre_animal: string;
+    especie: string;
+    raza_aparente?: string;
+    edad_aproximada?: string;
+    tamanio: string;
+    descripcion: string;
+}): Observable<{ id_adopcion: number }> {
+    return this.http.post<{ id_adopcion: number }>(`${environment.apiUrl}/publicaciones`, datos);
+}
+
   crearPublicacion(datos: FormData): Observable<PublicacionAdopcion> {
     return this.http.post<PublicacionAdopcion>(this.apiUrl, datos);
   }
