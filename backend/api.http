@@ -46,9 +46,9 @@ Content-Type: application/json
 }
 
 ### Pega los tokens aqui despues de correr los logins de arriba
-@tokenAdoptante = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJyb2wiOiJBRE9QVEFOVEUiLCJpYXQiOjE3OTA0NDE5NDMsImV4cCI6MTc5MDQ3MDc0M30.O1vQ2vQ_R8LWIUkM7ypGlJuvkw7c-XrA8PHNoysl0ao
-@tokenRefugio = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyLCJyb2wiOiJSRUZVR0lPIiwiaWF0IjoxNzkwNDQxNjQ0LCJleHAiOjE3OTA0NzA0NDR9.ZuYwW7snKCRGXA2aIzIluYFE8AZY_lSfi27SIt8tvD4
-@tokenAdmin = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjozLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc5MDQ0MTY2MSwiZXhwIjoxNzkwNDcwNDYxfQ.x8Ni64N1xSa3Q9_SCyeASCml-_Ho4oQ1tK4KWKeUaRg
+@tokenAdoptante = eyJhbGciOiIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJyb2wiOiJBRE9QVEFOVEUiLCJpYXQiOjE3OTA0NDE5NDMsImV4cCI6MTc5MDQ3MDc0M30.O1vQ2vQ_R8LWIUkM7ypGlJuvkw7c-XrA8PHNoysl0ao
+@tokenRefugio = eyJhbGciOiJIUzINiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyLCJyb2wiOiJSRUZVR0lPIiwiaWF0IjoxNzkwNDQxNjQ0LCJleHAiOjE3OTA0NzA0NDR9.ZuYwW7snKCRGXA2aIzIluYFE8AZY_lSfi27SIt8tvD4
+@tokenAdmin = eyJhbGciOiJIUzI1NiIsIn5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjozLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc5MDQ0MTY2MSwiZXhwIjoxNzkwNDcwNDYxfQ.x8Ni64N1xSa3Q9_SCyeASCml-_Ho4oQ1tK4KWKeUaRg
 
 ### ==================== REFUGIOS ====================
 

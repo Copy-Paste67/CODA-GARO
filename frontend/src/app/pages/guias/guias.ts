@@ -1,40 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-export interface GuiaCard {
-  id_guia: number;
-  titulo: string;
-  especie_objetivo: string;
-  resumen: string;
-}
+import { GuiaService, Guia } from '../../services/guia.service';
 
 @Component({
-  selector: 'app-guias',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './guias.html',
-  styleUrl: './guias.css',
+    selector: 'app-guias',
+    standalone: true,
+    imports: [CommonModule, RouterLink],
+    templateUrl: './guias.html',
+    styleUrl: './guias.css',
 })
-export class Guias {
-  guias: GuiaCard[] = [
-    {
-      id_guia: 1,
-      titulo: 'Primeros auxilios para mascotas rescatadas',
-      especie_objetivo: 'PERROS Y GATOS',
-      resumen: 'Aprende los pasos esenciales a seguir cuando encuentres a un animalito desorientado o lastimado.'
-    },
-    {
-      id_guia: 2,
-      titulo: 'Nutrición y alimentación en cachorros',
-      especie_objetivo: 'CACHORROS',
-      resumen: 'Guía completa sobre dietas balanceadas, porciones y vacunas indispensables en sus primeros meses.'
-    },
-    {
-      id_guia: 3,
-      titulo: 'Adaptación de un gato recién adoptado en su nuevo hogar',
-      especie_objetivo: 'GATOS',
-      resumen: 'Consejos para reducir el estrés en felinos durante su periodo de transición y socialización.'
+export class Guias implements OnInit {
+    private guiaService = inject(GuiaService);
+
+    guias: Guia[] = [];
+    cargando = true;
+    error: string | null = null;
+
+    ngOnInit(): void {
+        this.guiaService.listar().subscribe({
+            next: (data) => {
+                this.guias = data;
+                this.cargando = false;
+            },
+            error: () => {
+                this.error = 'No se pudo cargar la lista de guías';
+                this.cargando = false;
+            },
+        });
     }
-  ];
+
+    obtenerResumen(guia: Guia, maxCaracteres = 140): string {
+        const textoPlano = guia.contenido_html.replace(/<[^>]*>/g, '');
+        return textoPlano.length > maxCaracteres
+            ? textoPlano.slice(0, maxCaracteres).trim() + '...'
+            : textoPlano;
+    }
 }

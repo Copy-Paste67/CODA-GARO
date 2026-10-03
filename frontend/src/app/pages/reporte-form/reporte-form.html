@@ -62,6 +62,30 @@
       </div>
 
       <div class="form-grupo full-width">
+        <label>Foto de la mascota (Opcional)</label>
+
+        @if (!fotoUrl()) {
+          <input type="file" accept="image/*" (change)="onFotoSelected($event)" [disabled]="subiendoFoto()" />
+        }
+
+        @if (subiendoFoto()) {
+          <p class="preview-label">Subiendo foto...</p>
+        }
+
+        @if (errorFoto()) {
+          <p class="campo-error">{{ errorFoto() }}</p>
+        }
+
+        @if (fotoUrl()) {
+          <div class="preview-box">
+            <p class="preview-label">Foto seleccionada:</p>
+            <img [src]="fotoUrl()" alt="Foto del reporte" />
+            <button type="button" class="btn-cancelar" (click)="quitarFoto()">Cambiar foto</button>
+          </div>
+        }
+      </div>
+
+      <div class="form-grupo full-width">
         <label for="descripcion_fisica">Descripción física y señas particulares *</label>
         <textarea 
           id="descripcion_fisica" 

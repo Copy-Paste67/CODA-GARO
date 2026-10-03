@@ -3,11 +3,56 @@
    ========================================================== */
 
 .contenedor-adopcion {
-  display: flex;
-  gap: 2rem;
   padding: 2rem 1.5rem;
   max-width: 1280px;
   margin: 0 auto;
+}
+
+/* Hero / CTA principal */
+.hero-adopcion {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+}
+
+.hero-adopcion h1 {
+  color: var(--color-text-inverse);
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+.hero-adopcion p {
+  opacity: 0.9;
+  margin-bottom: 24px;
+  color: var(--color-text-inverse);
+}
+
+.btn-cta-hero {
+  display: inline-block;
+  background: var(--color-secondary);
+  color: var(--color-text-inverse);
+  padding: 14px 32px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.btn-cta-hero:hover {
+  background: var(--color-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Layout de filtros + catálogo, lado a lado */
+.layout-catalogo {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
 }
 
 /* Panel lateral de filtros */
@@ -83,19 +128,6 @@
 .grupo-campo input:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-light);
-}
-
-.filtros-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.btn-block {
-  width: 100%;
-  display: block;
-  text-align: center;
-  box-sizing: border-box;
 }
 
 /* Catálogo */
@@ -178,15 +210,6 @@
   color: var(--color-text);
 }
 
-.badge-edad {
-  background-color: var(--color-secondary-light);
-  color: #277855;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-}
-
 .detalles {
   margin: 0;
   color: var(--color-text-muted);
@@ -253,8 +276,11 @@
    ========================================================== */
 @media (max-width: 900px) {
   .contenedor-adopcion {
-    flex-direction: column;
     padding: 1.25rem;
+  }
+
+  .layout-catalogo {
+    flex-direction: column;
     gap: 1.5rem;
   }
 
@@ -262,6 +288,14 @@
     flex: none;
     width: 100%;
     position: static;
+  }
+
+  .hero-adopcion {
+    padding: 32px 20px;
+  }
+
+  .hero-adopcion h1 {
+    font-size: 1.6rem;
   }
 }
 

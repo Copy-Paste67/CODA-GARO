@@ -3,69 +3,61 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService, UsuarioSesion } from '../../services/auth.service';
-
-export interface Reporte {
-  id_reporte: number;
-  tipo: 'PERDIDO' | 'ENCONTRADO';
-  especie: string;
-  estado: 'BUSCANDO' | 'RESUELTO';
-  ubicacion_suceso: string;
-  fecha_suceso: string;
-  descripcion_fisica: string;
-}
+import { ReporteService, Reporte } from '../../services/reporte.service';
 
 @Component({
-  selector: 'app-reportes',
-  standalone: true,
-  imports: [CommonModule, DatePipe, RouterLink, ReactiveFormsModule],
-  templateUrl: './reportes.html',
-  styleUrl: './reportes.css',
+    selector: 'app-reportes',
+    standalone: true,
+    imports: [CommonModule, DatePipe, RouterLink, ReactiveFormsModule],
+    templateUrl: './reportes.html',
+    styleUrl: './reportes.css',
 })
 export class Reportes implements OnInit {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+    private fb = inject(FormBuilder);
+    private authService = inject(AuthService);
+    private reporteService = inject(ReporteService);
 
-  formFiltros!: FormGroup;
-  usuarioActual: UsuarioSesion | null = null;
-  reportes: Reporte[] = [];
-  reportesOriginales: Reporte[] = [
-    {
-      id_reporte: 1,
-      tipo: 'PERDIDO',
-      especie: 'PERRO',
-      estado: 'BUSCANDO',
-      ubicacion_suceso: 'Parque Central',
-      fecha_suceso: new Date().toISOString(),
-      descripcion_fisica: 'Golden Retriever con collar rojo, muy amigable.'
-    },
-    {
-      id_reporte: 2,
-      tipo: 'ENCONTRADO',
-      especie: 'GATO',
-      estado: 'BUSCANDO',
-      ubicacion_suceso: 'Calle Las Palmas 102',
-      fecha_suceso: new Date().toISOString(),
-      descripcion_fisica: 'Gatito blanco con ojos verdes, rescatado de la lluvia.'
+    formFiltros!: FormGroup;
+    usuarioActual: UsuarioSesion | null = null;
+    reportes: Reporte[] = [];
+    cargando = true;
+    error: string | null = null;
+
+    ngOnInit(): void {
+        this.usuarioActual = this.authService.currentUser();
+        this.formFiltros = this.fb.group({
+            tipo: [''],
+            especie: [''],
+            estado: [''],
+        });
+        this.cargarReportes();
     }
-  ];
 
-  ngOnInit(): void {
-    this.usuarioActual = this.authService.currentUser();
-    this.formFiltros = this.fb.group({
-      tipo: [''],
-      especie: [''],
-      estado: ['']
-    });
-    this.reportes = [...this.reportesOriginales];
-  }
+    cargarReportes(): void {
+        this.cargando = true;
+        this.error = null;
 
-  aplicarFiltros(): void {
-    const val = this.formFiltros.value;
-    this.reportes = this.reportesOriginales.filter(r => {
-      const matchTipo = !val.tipo || r.tipo === val.tipo;
-      const matchEspecie = !val.especie || r.especie === val.especie;
-      const matchEstado = !val.estado || r.estado === val.estado;
-      return matchTipo && matchEspecie && matchEstado;
-    });
-  }
+        const val = this.formFiltros?.value ?? {};
+
+        this.reporteService
+            .listar({
+                tipo: val.tipo || undefined,
+                especie: val.especie || undefined,
+                estado: val.estado || undefined,
+            })
+            .subscribe({
+                next: (data) => {
+                    this.reportes = data;
+                    this.cargando = false;
+                },
+                error: () => {
+                    this.error = 'No se pudo cargar la lista de reportes';
+                    this.cargando = false;
+                },
+            });
+    }
+
+    aplicarFiltros(): void {
+        this.cargarReportes();
+    }
 }

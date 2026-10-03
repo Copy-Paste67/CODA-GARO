@@ -11,7 +11,7 @@ import {
 } from '../models/reporteMascota.model';
 
 export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
-    const { tipo, especie, descripcion_fisica, ubicacion_suceso, fecha_suceso } = req.body;
+    const { tipo, especie, descripcion_fisica, ubicacion_suceso, telefono_contacto, fecha_suceso } = req.body;
 
     if (!tipo || !especie || !descripcion_fisica || !ubicacion_suceso || !fecha_suceso) {
         throw new AppError('Faltan campos obligatorios', 400);
@@ -22,6 +22,7 @@ export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promi
         especie,
         descripcion_fisica,
         ubicacion_suceso,
+        telefono_contacto,
         fecha_suceso,
     });
 
@@ -64,12 +65,13 @@ export const actualizar = asyncHandler(async (req: AuthRequest, res: Response): 
         throw new AppError('No puedes editar un reporte que no es tuyo', 403);
     }
 
-    const { tipo, especie, descripcion_fisica, ubicacion_suceso, fecha_suceso, estado } = req.body;
+    const { tipo, especie, descripcion_fisica, ubicacion_suceso, telefono_contacto, fecha_suceso, estado } = req.body;
     await actualizarReporte(id_reporte, {
         tipo,
         especie,
         descripcion_fisica,
         ubicacion_suceso,
+        telefono_contacto,
         fecha_suceso,
         estado,
     });

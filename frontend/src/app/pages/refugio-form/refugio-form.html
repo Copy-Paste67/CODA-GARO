@@ -34,14 +34,28 @@
       </div>
 
       <div class="form-grupo">
-        <label for="logo_url">URL del Logo o Foto de Portada (Opcional)</label>
-        <input 
-          id="logo_url" 
-          type="url" 
-          formControlName="logo_url" 
-          placeholder="https://ejemplo.com/logo.png" 
-        />
-      </div>
+      <label>Logo o Foto de Portada (Opcional)</label>
+
+      @if (!logoUrl()) {
+        <input type="file" accept="image/*" (change)="onLogoSelected($event)" [disabled]="subiendoLogo()" />
+      }
+
+      @if (subiendoLogo()) {
+        <p class="preview-label">Subiendo logo...</p>
+      }
+
+      @if (errorLogo()) {
+        <p class="campo-error">{{ errorLogo() }}</p>
+      }
+
+      @if (logoUrl()) {
+        <div class="preview-box">
+          <p class="preview-label">Logo seleccionado:</p>
+          <img [src]="logoUrl()" alt="Logo del refugio" />
+          <button type="button" class="btn-cancelar" (click)="quitarLogo()">Cambiar logo</button>
+        </div>
+      }
+    </div>
 
       <div class="form-grupo">
         <label for="descripcion">Historia, Misión y Necesidades del Refugio</label>

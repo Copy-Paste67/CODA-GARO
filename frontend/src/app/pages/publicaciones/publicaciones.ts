@@ -23,7 +23,6 @@ export class PublicacionesComponent implements OnInit {
 
   // Filtros
   filtroEspecie: string = '';
-  filtroRangoEdad: string = '';
   filtroPais: string = '';
   filtroCiudad: string = '';
 
@@ -131,7 +130,6 @@ export class PublicacionesComponent implements OnInit {
 
     const filtros: FiltrosPublicacion = {
       especie: this.filtroEspecie || undefined,
-      rango_edad: this.filtroRangoEdad || undefined,
       pais: this.filtroPais || undefined,
       ciudad: this.filtroCiudad || undefined
     };
@@ -166,18 +164,16 @@ export class PublicacionesComponent implements OnInit {
   private aplicarFiltrosLocales(lista: PublicacionAdopcion[]): void {
     const filtrado = lista.filter(pet => {
       const matchEspecie = !this.filtroEspecie || pet.especie.toUpperCase() === this.filtroEspecie.toUpperCase();
-      const matchEdad = !this.filtroRangoEdad || (pet.rango_edad && pet.rango_edad.toUpperCase() === this.filtroRangoEdad.toUpperCase());
       const matchPais = !this.filtroPais || (pet.pais && pet.pais.toLowerCase().includes(this.filtroPais.toLowerCase()));
       const matchCiudad = !this.filtroCiudad || (pet.ciudad && pet.ciudad.toLowerCase().includes(this.filtroCiudad.trim().toLowerCase()));
-      return matchEspecie && matchEdad && matchPais && matchCiudad;
+      return matchEspecie && matchPais && matchCiudad;
     });
 
     this.publicacionesFiltradas.set(filtrado);
-  }
+}
 
   limpiarFiltros(): void {
     this.filtroEspecie = '';
-    this.filtroRangoEdad = '';
     this.filtroPais = '';
     this.filtroCiudad = '';
     this.aplicarFiltrosLocales(this.publicaciones());

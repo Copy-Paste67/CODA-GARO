@@ -8,6 +8,7 @@ export interface ReporteMascota extends RowDataPacket {
     especie: 'PERRO' | 'GATO' | 'AVE' | 'OTRO';
     descripcion_fisica: string;
     ubicacion_suceso: string;
+    telefono_contacto: string | null;
     fecha_suceso: Date;
     estado: 'BUSCANDO' | 'RESUELTO';
     fecha_creacion: Date;
@@ -26,19 +27,21 @@ export const crearReporte = async (
         especie: string;
         descripcion_fisica: string;
         ubicacion_suceso: string;
+        telefono_contacto?: string;
         fecha_suceso: string;
     },
 ): Promise<number> => {
     const [result] = await pool.query<ResultSetHeader>(
         `INSERT INTO reporte_mascota
-         (id_usuario, tipo, especie, descripcion_fisica, ubicacion_suceso, fecha_suceso)
-         VALUES (?, ?, ?, ?, ?, ?)`,
+         (id_usuario, tipo, especie, descripcion_fisica, ubicacion_suceso, telefono_contacto, fecha_suceso)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
         [
             id_usuario,
             datos.tipo,
             datos.especie,
             datos.descripcion_fisica,
             datos.ubicacion_suceso,
+            datos.telefono_contacto ?? null,
             datos.fecha_suceso,
         ],
     );
@@ -87,6 +90,7 @@ export const actualizarReporte = async (
         especie: string;
         descripcion_fisica: string;
         ubicacion_suceso: string;
+        telefono_contacto?: string;
         fecha_suceso: string;
         estado: string;
     },
@@ -94,13 +98,14 @@ export const actualizarReporte = async (
     await pool.query(
         `UPDATE reporte_mascota
          SET tipo = ?, especie = ?, descripcion_fisica = ?, ubicacion_suceso = ?,
-             fecha_suceso = ?, estado = ?
+             telefono_contacto = ?, fecha_suceso = ?, estado = ?
          WHERE id_reporte = ?`,
         [
             datos.tipo,
             datos.especie,
             datos.descripcion_fisica,
             datos.ubicacion_suceso,
+            datos.telefono_contacto ?? null,
             datos.fecha_suceso,
             datos.estado,
             id_reporte,
