@@ -1,4 +1,4 @@
-import {Response } from 'express';
+import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
@@ -15,7 +15,7 @@ import { buscarReportePorId } from '../models/reporteMascota.model';
 export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { contenido, id_adopcion, id_reporte } = req.body;
 
-    if (!contenido) {
+    if (!contenido || !String(contenido).trim()) {
         throw new AppError('El contenido del comentario es obligatorio', 400);
     }
 
@@ -29,7 +29,7 @@ export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promi
         );
     }
 
-     let idAdopcionFinal: number | null = null;
+    let idAdopcionFinal: number | null = null;
     let idReporteFinal: number | null = null;
 
     if (tieneAdopcion) {
@@ -105,7 +105,7 @@ export const actualizar = asyncHandler(async (req: AuthRequest, res: Response): 
 
     const { contenido } = req.body;
 
-    if (!contenido) {
+    if (!contenido || !String(contenido).trim()) {
         throw new AppError('El contenido del comentario es obligatorio', 400);
     }
 
@@ -131,4 +131,3 @@ export const eliminar = asyncHandler(async (req: AuthRequest, res: Response): Pr
     await eliminarComentario(id_comentario);
     res.json({ mensaje: 'Comentario eliminado' });
 });
-

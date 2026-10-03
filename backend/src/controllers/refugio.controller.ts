@@ -61,6 +61,11 @@ export const actualizar = asyncHandler(async (req: AuthRequest, res: Response): 
     }
 
     const { nombre_refugio, direccion, descripcion, logo_url } = req.body;
+
+    if (!nombre_refugio || !direccion) {
+        throw new AppError('Faltan campos obligatorios', 400);
+    }
+
     await actualizarRefugio(id_refugio, nombre_refugio, direccion, descripcion, logo_url);
     res.json({ mensaje: 'Refugio actualizado' });
 });
@@ -85,6 +90,12 @@ export const eliminar = asyncHandler(async (req: AuthRequest, res: Response): Pr
 });
 
 export const verificar = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+    const esAdmin = req.usuario!.rol === 'ADMIN';
+
+    if (!esAdmin) {
+        throw new AppError('Solo un administrador puede verificar refugios', 403);
+    }
+
     const id_refugio = Number(req.params.id);
     const refugio = await buscarRefugioPorId(id_refugio);
 

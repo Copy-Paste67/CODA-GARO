@@ -14,7 +14,7 @@ import { buscarReportePorId } from '../models/reporteMascota.model';
 export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { url_imagen, id_adopcion, id_reporte } = req.body;
 
-    if (!url_imagen) {
+    if (!url_imagen || !String(url_imagen).trim()) {
         throw new AppError('La url de la imagen es obligatoria', 400);
     }
 

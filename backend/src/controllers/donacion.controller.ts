@@ -88,6 +88,9 @@ export const crearAnonima = asyncHandler(async (req: AuthRequest, res: Response)
     });
 });
 
+// GET /api/donaciones
+// - ADMIN: ve todas (puede filtrar por ?id_usuario= o ?id_refugio=)
+// - Usuario normal: ve solo las suyas
 export const listar = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { id_refugio, id_usuario, estado_pago } = req.query;
 
@@ -98,10 +101,14 @@ export const listar = asyncHandler(async (req: AuthRequest, res: Response): Prom
         estado_pago: estado_pago as string | undefined,
     };
 
-    if (!esAdmin) {
+    if (esAdmin) {
+        // ADMIN: puede filtrar por usuario, si no, ve todas
+        if (id_usuario) {
+            filtros.id_usuario = Number(id_usuario);
+        }
+    } else {
+        // Usuario normal: solo ve las suyas (ignora ?id_usuario=)
         filtros.id_usuario = req.usuario!.id_usuario;
-    } else if (id_usuario) {
-        filtros.id_usuario = Number(id_usuario);
     }
 
     const donaciones = await listarDonaciones(filtros);

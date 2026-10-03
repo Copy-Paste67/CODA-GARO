@@ -4,14 +4,14 @@ import { crear, crearAnonima, listar, obtenerPorId, actualizar } from '../contro
 
 const router = Router();
 
-// Donación anónima → pública, SIN token ( posdata :v va Antes de cualquier /:algo)
+// Donación anónima → pública, SIN token (va ANTES de cualquier /:algo)
 router.post('/anonima', crearAnonima);
 
 // Donación autenticada → requiere token
 router.post('/', verificarToken, crear);
 
-// Listar → solo ADMIN
-router.get('/', verificarToken, verificarRol('ADMIN'), listar);
+// Listar → cualquier usuario autenticado (admin ve todas, usuario ve las suyas)
+router.get('/', verificarToken, listar);
 
 // Ver una → ADMIN o dueño
 router.get('/:id', verificarToken, obtenerPorId);

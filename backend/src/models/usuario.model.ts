@@ -37,3 +37,12 @@ export const buscarUsuarioPorEmail = async (email: string): Promise<Usuario | nu
 
     return rows[0] ?? null;
 };
+
+export const buscarUsuarioPorId = async (id_usuario: number): Promise<Usuario | null> => {
+    const [rows] = await pool.query<Usuario[]>(
+        `SELECT * FROM usuario WHERE id_usuario = ?`,
+        [id_usuario],
+    );
+
+    return rows[0] ?? null;
+};
