@@ -10,6 +10,10 @@ import {
     eliminarPublicacion,
 } from '../models/publicacionAdopcion.model';
 
+const ESPECIES_VALIDAS = ['PERRO', 'GATO', 'AVE', 'OTRO'];
+const TAMANIOS_VALIDOS = ['PEQUENO', 'MEDIANO', 'GRANDE'];
+const ESTADOS_VALIDOS = ['DISPONIBLE', 'EN_TRAMITE', 'ADOPTADO'];
+
 export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { nombre_animal, especie, raza_aparente, edad_aproximada, tamanio, descripcion } = req.body;
 
@@ -17,24 +21,35 @@ export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promi
         throw new AppError('Faltan campos obligatorios', 400);
     }
 
+    const especieUpper = String(especie).trim().toUpperCase();
+    const tamanioUpper = String(tamanio).trim().toUpperCase();
+
+    if (!ESPECIES_VALIDAS.includes(especieUpper)) {
+        throw new AppError('Especie inválida. Debe ser PERRO, GATO, AVE u OTRO', 400);
+    }
+
+    if (!TAMANIOS_VALIDOS.includes(tamanioUpper)) {
+        throw new AppError('Tamaño inválido. Debe ser PEQUENO, MEDIANO o GRANDE', 400);
+    }
+
     const id_adopcion = await crearPublicacion(req.usuario!.id_usuario, {
         nombre_animal,
-        especie,
+        especie: especieUpper,
         raza_aparente,
         edad_aproximada,
-        tamanio,
+        tamanio: tamanioUpper,
         descripcion,
     });
 
-    res.status(201).json({ id_adopcion, especie, tamanio, descripcion, estado: 'DISPONIBLE' });
+    res.status(201).json({ id_adopcion, especie: especieUpper, tamanio: tamanioUpper, descripcion, estado: 'DISPONIBLE' });
 });
 
 export const listar = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { especie, tamanio, estado } = req.query;
     const publicaciones = await listarPublicaciones({
-        especie: especie as string,
-        tamanio: tamanio as string,
-        estado: estado as string,
+        especie: especie ? String(especie).toUpperCase() : undefined,
+        tamanio: tamanio ? String(tamanio).toUpperCase() : undefined,
+        estado: estado ? String(estado).toUpperCase() : undefined,
     });
 
     res.json(publicaciones);
@@ -66,14 +81,29 @@ export const actualizar = asyncHandler(async (req: AuthRequest, res: Response): 
     }
 
     const { nombre_animal, especie, raza_aparente, edad_aproximada, tamanio, descripcion, estado } = req.body;
+
+    const especieUpper = especie ? String(especie).trim().toUpperCase() : publicacion.especie;
+    const tamanioUpper = tamanio ? String(tamanio).trim().toUpperCase() : publicacion.tamanio;
+    const estadoUpper = estado ? String(estado).trim().toUpperCase() : publicacion.estado;
+
+    if (!ESPECIES_VALIDAS.includes(especieUpper)) {
+        throw new AppError('Especie inválida. Debe ser PERRO, GATO, AVE u OTRO', 400);
+    }
+    if (!TAMANIOS_VALIDOS.includes(tamanioUpper)) {
+        throw new AppError('Tamaño inválido. Debe ser PEQUENO, MEDIANO o GRANDE', 400);
+    }
+    if (!ESTADOS_VALIDOS.includes(estadoUpper)) {
+        throw new AppError('Estado inválido. Debe ser DISPONIBLE, EN_TRAMITE o ADOPTADO', 400);
+    }
+
     await actualizarPublicacion(id_adopcion, {
-        nombre_animal,
-        especie,
-        raza_aparente,
-        edad_aproximada,
-        tamanio,
-        descripcion,
-        estado,
+        nombre_animal: nombre_animal ?? publicacion.nombre_animal,
+        especie: especieUpper,
+        raza_aparente: raza_aparente ?? publicacion.raza_aparente,
+        edad_aproximada: edad_aproximada ?? publicacion.edad_aproximada,
+        tamanio: tamanioUpper,
+        descripcion: descripcion ?? publicacion.descripcion,
+        estado: estadoUpper,
     });
 
     res.json({ mensaje: 'Publicación actualizada' });

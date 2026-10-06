@@ -40,8 +40,10 @@ const procesarDonacion = async (
         throw new AppError('El monto debe ser mayor a 0', 400);
     }
 
-    if (!METODOS_PAGO_VALIDOS.includes(metodo_pago)) {
-        throw new AppError('Método de pago inválido', 400);
+    const metodoPagoUpper = String(metodo_pago).trim().toUpperCase();
+
+    if (!METODOS_PAGO_VALIDOS.includes(metodoPagoUpper)) {
+        throw new AppError('Método de pago inválido. Debe ser TARJETA, TRANSFERENCIA o PAYPAL', 400);
     }
 
     const refugio = await buscarRefugioPorId(Number(id_refugio));
@@ -54,7 +56,7 @@ const procesarDonacion = async (
         id_usuario,
         Number(id_refugio),
         montoNum,
-        metodo_pago,
+        metodoPagoUpper,
         id_transaccion,
     );
 
@@ -62,7 +64,7 @@ const procesarDonacion = async (
         id_donacion,
         id_refugio: Number(id_refugio),
         monto: montoNum,
-        metodo_pago,
+        metodo_pago: metodoPagoUpper,
     };
 };
 

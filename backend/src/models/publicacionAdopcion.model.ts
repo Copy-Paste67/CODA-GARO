@@ -90,7 +90,18 @@ export const listarPublicaciones = async (filtros: Filtros): Promise<Publicacion
 
 export const buscarPublicacionPorId = async (id_adopcion: number): Promise<PublicacionAdopcion | null> => {
     const [rows] = await pool.query<PublicacionAdopcion[]>(
-        `SELECT * FROM publicacion_adopcion WHERE id_adopcion = ?`,
+        `SELECT pa.*, img.url_imagen AS imagen_principal
+         FROM publicacion_adopcion pa
+         LEFT JOIN (
+             SELECT id_adopcion, MIN(fecha_subida) AS primera_fecha
+             FROM imagen
+             WHERE id_adopcion IS NOT NULL
+             GROUP BY id_adopcion
+         ) primera ON primera.id_adopcion = pa.id_adopcion
+         LEFT JOIN imagen img
+             ON img.id_adopcion = pa.id_adopcion
+             AND img.fecha_subida = primera.primera_fecha
+         WHERE pa.id_adopcion = ?`,
         [id_adopcion],
     );
 
@@ -124,6 +135,16 @@ export const actualizarPublicacion = async (
             datos.estado,
             id_adopcion,
         ],
+    );
+};
+
+export const actualizarEstadoPublicacion = async (
+    id_adopcion: number,
+    estado: string,
+): Promise<void> => {
+    await pool.query(
+        `UPDATE publicacion_adopcion SET estado = ? WHERE id_adopcion = ?`,
+        [estado, id_adopcion],
     );
 };
 

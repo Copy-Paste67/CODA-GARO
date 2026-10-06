@@ -65,15 +65,15 @@ export class AuthService {
   registro(datos: RegistroDatos): Observable<any> {
     return this.http.post(`${this.apiUrl}/registro`, datos).pipe(
       tap((res: any) => {
-        const usuarioCreado: UsuarioSesion = {
-          id_usuario: res.id_usuario || Date.now(),
+        const usuarioCreado: UsuarioSesion = res.usuario ?? {
+          id_usuario: res.id_usuario,
           nombre_completo: datos.nombre_completo,
           nombre: datos.nombre_completo,
           email: datos.email,
           rol: datos.rol,
           telefono: datos.telefono
         };
-        this.guardarSesion('mock_token_' + Date.now(), usuarioCreado);
+        this.guardarSesion(res.token, usuarioCreado);
       }),
       catchError((err) => {
         if (err.status === 0 || err.status === 404) {

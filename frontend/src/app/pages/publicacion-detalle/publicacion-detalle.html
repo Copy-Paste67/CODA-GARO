@@ -5,7 +5,17 @@
     </a>
   </div>
 
-  <section class="detalle-container" *ngIf="mascota">
+  <div class="estado-mensaje" *ngIf="cargando">
+    <div class="spinner"></div>
+    <p>Cargando información de la mascota...</p>
+  </div>
+
+  <div class="estado-mensaje" *ngIf="!cargando && errorCarga && !mascota">
+    <p>{{ errorCarga }}</p>
+    <a routerLink="/publicaciones" class="btn-volver">Volver al catálogo</a>
+  </div>
+
+  <section class="detalle-container" *ngIf="!cargando && mascota">
     <div class="detalle-card">
       <div class="detalle-galeria">
         <img [src]="mascota.imagen || 'favicon.ico'" [alt]="mascota.nombre_mascota || mascota.nombre_animal" />
@@ -79,8 +89,9 @@
           <label>¿Por qué te gustaría adoptar a esta mascota?</label>
           <textarea rows="3" [(ngModel)]="datosSolicitud.motivo" placeholder="Cuéntanos sobre tu hogar, tiempo disponible, etc."></textarea>
         </div>
-        <button type="button" class="btn btn-primary btn-block" (click)="enviarSolicitud()" [disabled]="!datosSolicitud.nombre || !datosSolicitud.telefono">
-          Enviar Solicitud
+        <p class="alerta-error" *ngIf="errorSolicitud">{{ errorSolicitud }}</p>
+        <button type="button" class="btn btn-primary btn-block" (click)="enviarSolicitud()" [disabled]="!datosSolicitud.nombre || !datosSolicitud.telefono || enviandoSolicitud">
+          {{ enviandoSolicitud ? 'Enviando solicitud...' : 'Enviar Solicitud' }}
         </button>
       </div>
       <div class="modal-exito" *ngIf="solicitudEnviada">

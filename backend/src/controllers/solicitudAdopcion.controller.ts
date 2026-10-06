@@ -10,7 +10,7 @@ import {
     actualizarEstadoSolicitud,
     eliminarSolicitud,
 } from '../models/solicitudAdopcion.model';
-import { buscarPublicacionPorId } from '../models/publicacionAdopcion.model';
+import { buscarPublicacionPorId, actualizarEstadoPublicacion } from '../models/publicacionAdopcion.model';
 
 const ESTADOS_VALIDOS = ['PENDIENTE', 'APROBADA', 'RECHAZADA', 'CANCELADA'];
 
@@ -122,12 +122,23 @@ export const actualizar = asyncHandler(async (req: AuthRequest, res: Response): 
 
     const { estado } = req.body;
 
-    if (!estado || !ESTADOS_VALIDOS.includes(estado)) {
-        throw new AppError('Estado inválido', 400);
+    if (!estado) {
+        throw new AppError('El estado es obligatorio', 400);
     }
 
-    await actualizarEstadoSolicitud(id_solicitud, estado);
-    res.json({ mensaje: 'Solicitud actualizada', estado });
+    const estadoUpper = String(estado).toUpperCase();
+
+    if (!ESTADOS_VALIDOS.includes(estadoUpper)) {
+        throw new AppError('Estado inválido. Debe ser PENDIENTE, APROBADA, RECHAZADA o CANCELADA', 400);
+    }
+
+    await actualizarEstadoSolicitud(id_solicitud, estadoUpper);
+
+    if (estadoUpper === 'APROBADA') {
+        await actualizarEstadoPublicacion(solicitud.id_adopcion, 'EN_TRAMITE');
+    }
+
+    res.json({ mensaje: 'Solicitud actualizada', estado: estadoUpper });
 });
 
 export const eliminar = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {

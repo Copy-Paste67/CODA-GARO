@@ -1,11 +1,13 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { timeout } from 'rxjs';
 import { UploadService } from '../../services/upload.service';
 import { PublicacionService } from '../../services/publicacion.service';
 import { ImagenService } from '../../services/imagen.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-publicacion-form',
@@ -21,6 +23,8 @@ export class PublicacionForm implements OnInit {
   private uploadService = inject(UploadService);
   private publicacionService = inject(PublicacionService);
   private imagenService = inject(ImagenService);
+  private authService = inject(AuthService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   formPublicacion!: FormGroup;
   esEdicion = false;
@@ -35,6 +39,17 @@ export class PublicacionForm implements OnInit {
   errorImagen = signal<string | null>(null);
 
   ngOnInit(): void {
+    if (!this.authService.isAutenticado()) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url }
+      });
+      return;
+    }
+
+    if (this.authService.currentUser()?.rol !== 'REFUGIO') {
+      this.errorFormulario = 'Solo una cuenta con rol REFUGIO puede publicar mascotas en adopción.';
+    }
+
     this.formPublicacion = this.fb.group({
       nombre_mascota: ['', [Validators.required, Validators.minLength(2)]],
       especie: ['PERRO', [Validators.required]],
@@ -85,10 +100,12 @@ export class PublicacionForm implements OnInit {
         this.imagenUrl.set(url);
         this.imagenParaRecortar.set(null); // cierra el recortador
         this.subiendoImagen.set(false);
+        this.changeDetector.markForCheck();
       },
       error: () => {
         this.errorImagen.set('No se pudo subir la imagen. Intenta de nuevo.');
         this.subiendoImagen.set(false);
+        this.changeDetector.markForCheck();
       },
     });
   }
@@ -103,6 +120,11 @@ export class PublicacionForm implements OnInit {
   }
 
   guardar(): void {
+    if (this.authService.currentUser()?.rol !== 'REFUGIO') {
+      this.errorFormulario = 'Inicia sesión con una cuenta de refugio para publicar esta mascota.';
+      return;
+    }
+
     if (this.formPublicacion.invalid) {
       this.errorFormulario = 'Por favor completa todos los campos requeridos correctamente.';
       return;
@@ -122,12 +144,13 @@ export class PublicacionForm implements OnInit {
         tamanio: valores.tamano,
         descripcion: valores.descripcion,
       })
+      .pipe(timeout({ first: 15000 }))
       .subscribe({
         next: (respuesta) => {
           const idAdopcionNueva = respuesta.id_adopcion;
 
           if (this.imagenUrl()) {
-          this.imagenService.guardarImagen(this.imagenUrl()!, idAdopcionNueva).subscribe({
+          this.imagenService.guardarImagen(this.imagenUrl()!, idAdopcionNueva).pipe(timeout({ first: 15000 })).subscribe({
             next: () => this.finalizarGuardado(valores.nombre_mascota),
             error: (err) => {
               console.error('Error al guardar imagen:', err);
@@ -141,13 +164,17 @@ export class PublicacionForm implements OnInit {
       },
       error: (err) => {
         this.guardando = false;
-        this.errorFormulario = err.error?.error ?? 'No se pudo publicar la mascota. Intenta de nuevo.';
+          this.errorFormulario = err.name === 'TimeoutError'
+            ? 'El servidor tardó demasiado en responder. Verifica la conexión e inténtalo de nuevo.'
+            : err.error?.error ?? 'No se pudo publicar la mascota. Intenta de nuevo.';
+        this.changeDetector.markForCheck();
       },
     });
 }
 
   private finalizarGuardado(nombre: string): void {
     this.guardando = false;
+    this.changeDetector.markForCheck();
     alert(`¡Mascota ${nombre} ${this.esEdicion ? 'actualizada' : 'publicada'} con éxito!`);
     this.router.navigate(['/publicaciones']);
   }

@@ -6,7 +6,7 @@
       <p>Completa los datos de la mascota para ayudarle a encontrar una familia amorosa</p>
     </div>
 
-    <form [formGroup]="formPublicacion" (ngSubmit)="guardar()">
+    <form *ngIf="formPublicacion" [formGroup]="formPublicacion" (ngSubmit)="guardar()">
       <!-- Fila 1: Nombre y Especie -->
       <div class="form-row">
         <div class="form-grupo">

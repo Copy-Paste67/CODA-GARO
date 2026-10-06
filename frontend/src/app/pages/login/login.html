@@ -48,18 +48,6 @@
         {{ cargando ? 'Iniciando sesión...' : 'Entrar a Coda Garo' }}
       </button>
 
-      <div class="demo-logins">
-        <p class="demo-title">¿Quieres probar rápido?</p>
-        <div class="demo-buttons">
-          <button type="button" class="btn-demo" (click)="loginRapido('adoptante@coda.org', 'ADOPTANTE')">
-            👤 Adoptante
-          </button>
-          <button type="button" class="btn-demo" (click)="loginRapido('refugio@coda.org', 'REFUGIO')">
-            🏡 Refugio
-          </button>
-        </div>
-      </div>
-
       <div class="registro-redirect">
         ¿Aún no tienes una cuenta? 
         <a routerLink="/registro">Regístrate aquí</a>

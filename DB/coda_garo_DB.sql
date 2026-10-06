@@ -68,6 +68,7 @@ CREATE TABLE reporte_mascota (
     especie ENUM('PERRO', 'GATO', 'AVE', 'OTRO') NOT NULL,
     descripcion_fisica TEXT NOT NULL,
     ubicacion_suceso VARCHAR(255) NOT NULL,
+    telefono_contacto VARCHAR(20),
     fecha_suceso DATE NOT NULL,
     estado ENUM('BUSCANDO', 'RESUELTO') DEFAULT 'BUSCANDO',
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

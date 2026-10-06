@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   email: string = '';
   password: string = '';
@@ -23,12 +24,6 @@ export class LoginComponent {
 
   togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;
-  }
-
-  loginRapido(emailDemo: string, rolDemo: string): void {
-    this.email = emailDemo;
-    this.password = '123456';
-    this.onSubmit();
   }
 
   onSubmit(): void {
@@ -43,7 +38,8 @@ export class LoginComponent {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: () => {
         this.cargando = false;
-        this.router.navigate(['/publicaciones']);
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        this.router.navigateByUrl(returnUrl || '/publicaciones');
       },
       error: (err) => {
         this.cargando = false;
