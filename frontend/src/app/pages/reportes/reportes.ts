@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -19,9 +19,9 @@ export class Reportes implements OnInit {
 
     formFiltros!: FormGroup;
     usuarioActual: UsuarioSesion | null = null;
-    reportes: Reporte[] = [];
-    cargando = true;
-    error: string | null = null;
+    reportes = signal<Reporte[]>([]);
+    cargando = signal(true);
+    error = signal<string | null>(null);
 
     ngOnInit(): void {
         this.usuarioActual = this.authService.currentUser();
@@ -34,8 +34,8 @@ export class Reportes implements OnInit {
     }
 
     cargarReportes(): void {
-        this.cargando = true;
-        this.error = null;
+        this.cargando.set(true);
+        this.error.set(null);
 
         const val = this.formFiltros?.value ?? {};
 
@@ -47,12 +47,12 @@ export class Reportes implements OnInit {
             })
             .subscribe({
                 next: (data) => {
-                    this.reportes = data;
-                    this.cargando = false;
+                    this.reportes.set(data);
+                    this.cargando.set(false);
                 },
                 error: () => {
-                    this.error = 'No se pudo cargar la lista de reportes';
-                    this.cargando = false;
+                    this.error.set('No se pudo cargar la lista de reportes');
+                    this.cargando.set(false);
                 },
             });
     }

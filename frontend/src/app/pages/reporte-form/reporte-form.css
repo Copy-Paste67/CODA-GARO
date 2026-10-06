@@ -178,3 +178,31 @@
     width: 100%;
   }
 }
+
+/* Input de archivo */
+input[type="file"] {
+  font-family: var(--font-family);
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: #FFFFFF;
+  width: 100%;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  font-family: var(--font-family);
+  padding: 8px 16px;
+  margin-right: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: var(--color-primary-hover);
+}

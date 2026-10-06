@@ -4,16 +4,16 @@
     <p>Aprende las mejores prácticas y consejos veterinarios para cuidar y rehabilitar a tus mascotas.</p>
   </div>
 
-  <div *ngIf="cargando" class="estado-mensaje">
+  <div *ngIf="cargando()" class="estado-mensaje">
     <p>Cargando guías...</p>
   </div>
 
-  <div *ngIf="error" class="alerta-error">
-    {{ error }}
+  <div *ngIf="error()" class="alerta-error">
+    {{ error() }}
   </div>
 
-  <div class="grid-guias" *ngIf="!cargando && guias.length > 0">
-    <article class="card-guia" *ngFor="let guia of guias">
+  <div class="grid-guias" *ngIf="!cargando() && guias().length > 0">
+    <article class="card-guia" *ngFor="let guia of guias()">
       <span class="guia-categoria">{{ guia.especie_objetivo }}</span>
       <h3>{{ guia.titulo }}</h3>
       <p>{{ obtenerResumen(guia) }}</p>
@@ -21,7 +21,10 @@
     </article>
   </div>
 
-  <div class="estado-mensaje" *ngIf="!cargando && guias.length === 0">
-    <p>No hay guías publicadas todavía.</p>
+  <div class="estado-mensaje" *ngIf="!cargando() && !error() && guias().length === 0">
+    <p>Aún no hay guías publicadas.</p>
+    <p *ngIf="usuarioActual?.rol === 'ADMIN'">
+      <a routerLink="/guias/nuevo" class="btn btn-primary mt-2">Sé el primero en crear una</a>
+    </p>
   </div>
 </section>

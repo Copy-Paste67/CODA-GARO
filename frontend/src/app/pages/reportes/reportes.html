@@ -41,17 +41,17 @@
     </div>
   </form>
 
-  <div *ngIf="cargando" class="estado-mensaje">
+  <div *ngIf="cargando()" class="estado-mensaje">
     <p>Cargando reportes...</p>
   </div>
 
-  <div *ngIf="error" class="alerta-error">
-    {{ error }}
+  <div *ngIf="error()" class="alerta-error">
+    {{ error() }}
   </div>
 
   <!-- Grid de Reportes -->
-  <div class="grid-reportes" *ngIf="!cargando && reportes.length > 0">
-    <article class="card-reporte" *ngFor="let reporte of reportes">
+  <div class="grid-reportes" *ngIf="!cargando() && reportes().length > 0">
+    <article class="card-reporte" *ngFor="let reporte of reportes()">
       <div class="card-reporte-header">
         <span class="badge" [class.badge-perdido]="reporte.tipo === 'PERDIDO'" [class.badge-encontrado]="reporte.tipo === 'ENCONTRADO'">
           {{ reporte.tipo }}
@@ -74,7 +74,7 @@
     </article>
   </div>
 
-  <div class="estado-mensaje" *ngIf="!cargando && reportes.length === 0">
+  <div class="estado-mensaje" *ngIf="!cargando() && reportes().length === 0">
     <p>No se encontraron reportes con los filtros seleccionados.</p>
   </div>
 </section>

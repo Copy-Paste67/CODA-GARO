@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService, UsuarioSesion } from '../../services/auth.service';
@@ -25,9 +25,9 @@ export class Refugios implements OnInit {
     private refugioService = inject(RefugioService);
 
     usuarioActual: UsuarioSesion | null = null;
-    refugios: Refugio[] = [];
-    cargando = true;
-    error: string | null = null;
+    refugios = signal<Refugio[]>([]);
+    cargando = signal(true);
+    error = signal<string | null>(null);
 
     ngOnInit(): void {
         this.usuarioActual = this.authService.currentUser();
@@ -35,17 +35,17 @@ export class Refugios implements OnInit {
     }
 
     cargarRefugios(): void {
-        this.cargando = true;
-        this.error = null;
+        this.cargando.set(true);
+        this.error.set(null);
 
         this.refugioService.listar().subscribe({
             next: (data) => {
-                this.refugios = data;
-                this.cargando = false;
+                this.refugios.set(data);
+                this.cargando.set(false);
             },
             error: () => {
-                this.error = 'No se pudo cargar la lista de refugios';
-                this.cargando = false;
+                this.error.set('No se pudo cargar la lista de refugios');
+                this.cargando.set(false);
             },
         });
     }

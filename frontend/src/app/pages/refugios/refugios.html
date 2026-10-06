@@ -10,16 +10,16 @@
     </a>
   </header>
 
-  <div *ngIf="cargando" class="estado-mensaje">
+  <div *ngIf="cargando()" class="estado-mensaje">
     <p>Cargando refugios...</p>
   </div>
 
-  <div *ngIf="error" class="alerta-error">
-    {{ error }}
+  <div *ngIf="error()" class="alerta-error">
+    {{ error() }}
   </div>
 
-  <div class="grid-refugios" *ngIf="!cargando && refugios.length > 0">
-    <article class="card-refugio" *ngFor="let refugio of refugios">
+  <div class="grid-refugios" *ngIf="!cargando() && refugios().length > 0">
+    <article class="card-refugio" *ngFor="let refugio of refugios()">
       <div class="refugio-top">
         <div class="refugio-avatar">
           <img *ngIf="refugio.logo_url" [src]="refugio.logo_url" alt="Logo {{ refugio.nombre_refugio }}" />
@@ -47,7 +47,7 @@
     </article>
   </div>
 
-  <div class="estado-mensaje" *ngIf="!cargando && refugios.length === 0">
+  <div class="estado-mensaje" *ngIf="!cargando() && refugios().length === 0">
     <p>No hay refugios registrados por el momento.</p>
   </div>
 </section>

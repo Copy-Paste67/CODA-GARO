@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { GuiaService, Guia } from '../../services/guia.service';
+import { AuthService, UsuarioSesion } from '../../services/auth.service';
 
 @Component({
     selector: 'app-guias',
@@ -12,20 +13,24 @@ import { GuiaService, Guia } from '../../services/guia.service';
 })
 export class Guias implements OnInit {
     private guiaService = inject(GuiaService);
+    private authService = inject(AuthService);
 
-    guias: Guia[] = [];
-    cargando = true;
-    error: string | null = null;
+    usuarioActual: UsuarioSesion | null = null;
+    guias = signal<Guia[]>([]);
+    cargando = signal(true);
+    error = signal<string | null>(null);
 
     ngOnInit(): void {
+        this.usuarioActual = this.authService.currentUser();
+
         this.guiaService.listar().subscribe({
             next: (data) => {
-                this.guias = data;
-                this.cargando = false;
+                this.guias.set(data);
+                this.cargando.set(false);
             },
             error: () => {
-                this.error = 'No se pudo cargar la lista de guías';
-                this.cargando = false;
+                this.error.set('No se pudo cargar la lista de guías');
+                this.cargando.set(false);
             },
         });
     }

@@ -9,26 +9,21 @@
       ℹ️ Estás donando como invitado. <a routerLink="/login">Inicia sesión</a> para guardar tu historial.
     </p>
 
-    <!-- Selector de montos predefinidos -->
-    <label class="label-montos">Selecciona un monto sugerido ($ USD):</label>
-    <div class="montos-selector">
-      <button 
-        type="button" 
-        *ngFor="let m of montosSugeridos" 
-        class="btn-monto"
-        [class.activo]="formDonacion.get('monto')?.value === m"
-        (click)="seleccionarMonto(m)"
-      >
-        ${{ m }}
-      </button>
-    </div>
-
     <form [formGroup]="formDonacion" (ngSubmit)="donar()">
-      <div class="form-grupo">
+      <!-- Refugio: fijo si viene de una tarjeta especifica, o selector si no -->
+      <div class="form-grupo" *ngIf="refugioFijo() as refugio">
+        <label>Donando a:</label>
+        <div class="refugio-fijo-box">
+          <span>🏡 {{ refugio.nombre_refugio }}</span>
+          <button type="button" class="btn-cambiar-refugio" (click)="quitarRefugioFijo()">Cambiar</button>
+        </div>
+      </div>
+
+      <div class="form-grupo" *ngIf="!refugioFijo()">
         <label for="id_refugio">Refugio o Santuario a apoyar</label>
-        <select id="id_refugio" formControlName="id_refugio">
-          <option value="">Selecciona un refugio...</option>
-          <option *ngFor="let refugio of refugios" [value]="refugio.id_refugio">
+        <select id="id_refugio" formControlName="id_refugio" [disabled]="cargandoRefugios()">
+          <option value="">{{ cargandoRefugios() ? 'Cargando refugios...' : 'Selecciona un refugio...' }}</option>
+          <option *ngFor="let refugio of refugios()" [value]="refugio.id_refugio">
             🏡 {{ refugio.nombre_refugio }}
           </option>
         </select>
@@ -37,21 +32,55 @@
         </span>
       </div>
 
-      <div class="form-grupo">
-        <label for="monto">Monto personalizado ($ USD)</label>
-        <input id="monto" type="number" min="1" step="0.5" formControlName="monto" />
+      <!-- Montos -->
+      <label class="label-montos">Selecciona un monto ($ USD):</label>
+      <div class="montos-selector">
+        <button
+          type="button"
+          *ngFor="let m of montosSugeridos"
+          class="btn-monto"
+          [class.activo]="!mostrarMontoPersonalizado() && formDonacion.get('monto')?.value === m"
+          (click)="seleccionarMonto(m)"
+        >
+          ${{ m }}
+        </button>
+        <button
+          type="button"
+          class="btn-monto btn-monto-otro"
+          [class.activo]="mostrarMontoPersonalizado()"
+          (click)="activarMontoPersonalizado()"
+        >
+          Otro monto
+        </button>
+      </div>
+
+      <div class="form-grupo" *ngIf="mostrarMontoPersonalizado()">
+        <label for="monto">Ingresa el monto ($ USD)</label>
+        <input id="monto" type="number" min="1" step="0.5" formControlName="monto" placeholder="Ej. 15" />
         <span class="form-error" *ngIf="formDonacion.get('monto')?.invalid && formDonacion.get('monto')?.touched">
           El monto mínimo es de $1 USD.
         </span>
       </div>
 
-      <div class="form-grupo">
-        <label for="metodo_pago">Método de pago</label>
-        <select id="metodo_pago" formControlName="metodo_pago">
-          <option value="TARJETA">💳 Tarjeta de Crédito / Débito</option>
-          <option value="PAYPAL">🅿️ PayPal</option>
-          <option value="TRANSFERENCIA">🏦 Transferencia Bancaria</option>
-        </select>
+      <!-- Metodo de pago: 2 botones -->
+      <label class="label-montos">Método de pago</label>
+      <div class="metodo-pago-selector">
+        <button
+          type="button"
+          class="btn-metodo"
+          [class.activo]="formDonacion.get('metodo_pago')?.value === 'TARJETA'"
+          (click)="seleccionarMetodoPago('TARJETA')"
+        >
+          💳 Tarjeta de Crédito / Débito
+        </button>
+        <button
+          type="button"
+          class="btn-metodo"
+          [class.activo]="formDonacion.get('metodo_pago')?.value === 'TRANSFERENCIA'"
+          (click)="seleccionarMetodoPago('TRANSFERENCIA')"
+        >
+          🏦 Transferencia Bancaria
+        </button>
       </div>
 
       <div class="form-page__error" *ngIf="errorFormulario">
