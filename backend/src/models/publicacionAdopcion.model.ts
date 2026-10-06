@@ -12,7 +12,7 @@ export interface PublicacionAdopcion extends RowDataPacket {
     descripcion: string;
     estado: 'DISPONIBLE' | 'EN_TRAMITE' | 'ADOPTADO';
     fecha_creacion: Date;
-    imagen_principal: string | null; // <- nuevo
+    imagen_principal: string | null;
 }
 
 interface Filtros {
@@ -55,12 +55,14 @@ export const listarPublicaciones = async (filtros: Filtros): Promise<Publicacion
         SELECT pa.*, img.url_imagen AS imagen_principal
         FROM publicacion_adopcion pa
         LEFT JOIN (
-            SELECT id_adopcion, MIN(id_imagen) AS id_imagen
+            SELECT id_adopcion, MIN(fecha_subida) AS primera_fecha
             FROM imagen
             WHERE id_adopcion IS NOT NULL
             GROUP BY id_adopcion
         ) primera ON primera.id_adopcion = pa.id_adopcion
-        LEFT JOIN imagen img ON img.id_imagen = primera.id_imagen
+        LEFT JOIN imagen img
+            ON img.id_adopcion = pa.id_adopcion
+            AND img.fecha_subida = primera.primera_fecha
         WHERE 1 = 1
     `;
     const params: string[] = [];

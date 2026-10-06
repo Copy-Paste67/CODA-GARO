@@ -35,6 +35,10 @@ export const crear = asyncHandler(async (req: AuthRequest, res: Response): Promi
         throw new AppError('Esta mascota ya fue adoptada', 400);
     }
 
+    if (publicacion.estado === 'EN_TRAMITE') {
+        throw new AppError('Esta mascota ya está en proceso de adopción', 400);
+    }
+
     const existente = await buscarSolicitudPorAdopcionYAdoptante(
         Number(id_adopcion),
         req.usuario!.id_usuario,
